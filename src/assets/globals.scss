@@ -1,0 +1,16 @@
+@use '@modules/bootstrap/scss/bootstrap';
+@import '@modules/bootstrap/scss/functions';
+@import '@modules/bootstrap/scss/variables';
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+    --bs-font-sans-serif: 'Roboto', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #EEEEEE;
+}

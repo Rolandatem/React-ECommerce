@@ -1,0 +1,13 @@
+@import '@/assets/globals.scss';
+
+.brand,
+.cart {
+    @extend .fs-2;
+    @extend .fs-sm-4;
+
+    color: #DEDAD6;
+
+    &:hover {
+        color: $gray-100;
+    }
+}

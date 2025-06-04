@@ -1,0 +1,11 @@
+@import '@/assets/globals.scss';
+
+.cardOpacity {
+    --bs-bg-opacity: 0.75;
+}
+
+@media (max-width: 576px) {
+    .cardOpacity {
+        --bs-bg-opacity: 0.5 !important;
+    }
+}

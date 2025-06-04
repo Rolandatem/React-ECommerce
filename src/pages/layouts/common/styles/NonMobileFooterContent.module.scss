@@ -1,0 +1,9 @@
+@import '@/assets/globals.scss';
+
+.footerLinkButton {
+    @extend .text-muted;
+
+    &:hover {
+        @extend .text-decoration-underline;
+    }
+}
