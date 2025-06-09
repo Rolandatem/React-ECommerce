@@ -15,7 +15,6 @@ const TrendingProducts: React.FC<IComponentClass> = (
     //===========================================================================================================================
     const { trendingProducts, loadingTrendingProducts, trendingProductsError } = useTrendingProducts();
     const scrollerRef = useRef<HTMLElement | null>(null);
-    const cardScrollMultiple: number = 3;
 
     //===========================================================================================================================
     /**

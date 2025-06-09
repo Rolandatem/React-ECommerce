@@ -29,7 +29,8 @@ const ErrorIndicator = ({
     return (
         <div className={`${errorIndicatorPosition} z-3 top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-dark-transparent`}>
             <div className="bg-white px-5 py-3 rounded border border-dark d-flex align-items-center">
-                <span className="text-dark ms-2 fs-5 fw-bold">{message}</span>
+                <span className="pi pi-exclamation-triangle text-danger fs-md-4 fw-bold"></span>
+                <span className="text-dark ms-2 fs-md-5 fw-bold">{message}</span>
             </div>
         </div>
     )

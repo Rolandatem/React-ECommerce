@@ -16,9 +16,9 @@ function App() {
     <SiteSettingsContext.Provider value={siteSettings}>
       <BrowserRouter>
         <Routes>
-          <Route path="*" element={<NotFound404 />} />
           <Route path="/" element={<CommonLayout />}>
             <Route index element={<Home />} />
+            <Route path="*" element={<NotFound404 />} />
           </Route>
         </Routes>
       </BrowserRouter>
