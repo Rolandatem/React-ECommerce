@@ -16,10 +16,10 @@ const CommonLayoutHeader = () => {
     //===========================================================================================================================
     return (
         <Navbar bg='dark' data-bs-theme="dark" expand="sm">
-            <Container fluid>
+            <Container fluid className='align-items-start'>
                 
                 {/* COMPANY BRAND */}
-                <Col xs="3">
+                <Col xs="3" className={styles.leftSideHeader}>
                     <div onClick={() => navigate('/')} role='button' className={`d-inline ${styles.brand}`}>
                         <span className='pi pi-building-columns'></span>
                         <span className='ms-2 d-none d-md-inline font-roboto'>Martinez Flooring</span>
@@ -28,7 +28,7 @@ const CommonLayoutHeader = () => {
 
                 {/* NAVIGATION */}
                 <Col className='text-center'>
-                    <Navbar.Toggle className=''></Navbar.Toggle>
+                    <Navbar.Toggle></Navbar.Toggle>
                     <Navbar.Collapse className='justify-content-center'>
                         <Nav>
                             <NavDropdown title='Flooring by Category'>
@@ -55,7 +55,7 @@ const CommonLayoutHeader = () => {
                 </Col>
 
                 {/* SHOPPING CART */}
-                <Col className='text-end' xs="3">
+                <Col className={styles.rightSideHeader} xs="3">
                     <div role='button' className='d-inline'>
                         <span className={`pi pi-shopping-cart ${styles.cart}`}></span>
                         <Badge pill>9</Badge>

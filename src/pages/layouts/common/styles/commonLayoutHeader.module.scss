@@ -1,5 +1,17 @@
 @import '@/assets/globals.scss';
 
+.leftSideHeader {
+    @extend .d-flex;
+    @extend .align-items-center;
+
+    height: 40px;
+}
+
+.rightSideHeader {
+    @extend .leftSideHeader;
+    @extend .justify-content-end;
+}
+
 .brand,
 .cart {
     @extend .fs-4;
