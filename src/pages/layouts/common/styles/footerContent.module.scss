@@ -2,6 +2,7 @@
 
 .footerLinkButton {
     @extend .text-muted;
+    @extend .d-table;
 
     &:hover {
         @extend .text-decoration-underline;

@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { type IComponentClass } from "@/tools/interfaces";
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row'
-import styles from '../styles/NonMobileFooterContent.module.scss';
+import styles from '../styles/footerContent.module.scss';
 import NewsletterSignup from "./NewsletterSignup";
 
 
@@ -28,7 +28,7 @@ const NonMobileFooterContent: React.FC<IComponentClass> = (props) => {
                 <div className="text-muted">
                     <div>123 W. Center Parkway</div>
                     <div>Phoenix, AZ 85001</div>
-                    <div role="button" className="text-decoration-underline" onClick={() => navigate('/contactus')}>e.customerservice@martinezflooring.com</div>
+                    <div role="button" className="text-decoration-underline d-inline-grid" onClick={() => navigate('/contactus')}>e.customerservice@martinezflooring.com</div>
                 </div>
             </Col>
         </Row>

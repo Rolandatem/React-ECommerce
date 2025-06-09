@@ -1,15 +1,17 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Modal from 'react-bootstrap/Modal';
 import MobileFooterContent from "./MobileFooterContent";
-import NonMobileFooterContent from "./NonMobileFooterContent";
+import FooterContent from "./FooterContent";
 import type { INewsletterProps } from "@/tools/interfaces";
-import { NewsletterContext } from "@/tools/contexts";
+import { NewsletterContext, SiteSettingsContext } from "@/tools/contexts";
 
 const CommonLayoutFooter = () => {
     const [newsletterEmail, setNewsletterEmail] = useState<string>();
     const [showNewsletterDialog, setShowNewsLetterDialog] = useState<boolean>(false);
+
+    const siteSettings = useContext(SiteSettingsContext);
     
     const joinNewsletter = (e:React.FormEvent<HTMLFormElement>) => {
         //const formData = new FormData(e.currentTarget);
@@ -34,8 +36,11 @@ const CommonLayoutFooter = () => {
         <>
             <Container fluid className="bg-dark">
                 <NewsletterContext.Provider value={commonProps}>
-                    <MobileFooterContent className="d-sm-none mt-5" />
-                    <NonMobileFooterContent className="d-none d-sm-flex mt-5" />
+                    { 
+                        siteSettings?.isMobile 
+                            ? <MobileFooterContent className="mt-5" /> 
+                            : <FooterContent className="mt-5" /> 
+                    }
                 </NewsletterContext.Provider>
             </Container>
 

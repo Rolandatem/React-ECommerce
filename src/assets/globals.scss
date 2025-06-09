@@ -1,10 +1,13 @@
-@use '@modules/bootstrap/scss/bootstrap';
-@import '@modules/bootstrap/scss/functions';
-@import '@modules/bootstrap/scss/variables';
+@import 'base.scss';
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
 :root {
-    --bs-font-sans-serif: 'Roboto', sans-serif;
+    //--bs-font-sans-serif: 'Roboto', sans-serif;
+    //--bs-body-font-family: 'Roboto', sans-serif;
+}
+
+.font-roboto {
+    font-family: 'Roboto', sans-serif;
 }
 
 * {
@@ -13,4 +16,11 @@
 
 body {
     background-color: #EEEEEE;
+}
+
+.bg-dark-transparent-subtle {
+    background-color: rgba(0,0,0,.35);
+}
+.bg-dark-transparent {
+    background-color: rgba(0,0,0,.8);
 }

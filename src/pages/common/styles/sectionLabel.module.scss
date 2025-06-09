@@ -1,0 +1,27 @@
+@import '@/assets/globals.scss';
+
+.label {
+    @extend .border;
+    @extend .rounded;
+    @extend .fs-3;
+    @extend .fw-bold;
+    background-color: $gray-400;
+}
+
+.labelBarBase {
+    content: '';
+    position: absolute;
+    top: 50%;
+    border-top: 4px solid $gray-900;
+    background: $gray-900;
+    transform: translateY(-50%);
+}
+
+.labelBar {
+    @extend .position-relative;
+}
+.labelBar:before {
+    @extend .labelBarBase;
+    left: 0;
+    width: 100%;
+}

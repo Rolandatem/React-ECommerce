@@ -15,10 +15,10 @@ const CommonLayoutHeader = () => {
             <Container fluid>
                 
                 {/* COMPANY BRAND */}
-                <Col xs="2">
+                <Col xs="3">
                     <div onClick={() => navigate('/')} role='button' className={`d-inline ${styles.brand}`}>
                         <span className='pi pi-building-columns'></span>
-                        <span className='ms-2 d-none d-sm-inline'>Martinez Flooring</span>
+                        <span className='ms-2 d-none d-md-inline font-roboto'>Martinez Flooring</span>
                     </div>
                 </Col>
 
@@ -51,7 +51,7 @@ const CommonLayoutHeader = () => {
                 </Col>
 
                 {/* SHOPPING CART */}
-                <Col className='text-end' xs="2">
+                <Col className='text-end' xs="3">
                     <div role='button' className='d-inline'>
                         <span className={`pi pi-shopping-cart ${styles.cart}`}></span>
                         <Badge pill>9</Badge>
