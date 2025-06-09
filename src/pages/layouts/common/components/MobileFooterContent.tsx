@@ -4,9 +4,13 @@ import { type IComponentClass } from '@/tools/interfaces';
 import Accordion from 'react-bootstrap/Accordion';
 import NewsletterSignup from './NewsletterSignup';
 
+/**
+ * Footer content for mobile pages.
+ */
 const MobileFooterContent: React.FC<IComponentClass> = (props) => {
     const navigate = useNavigate();
 
+    //===========================================================================================================================
     return (
         <Accordion flush className={props.className}>
 

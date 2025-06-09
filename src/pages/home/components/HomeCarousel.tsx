@@ -3,6 +3,9 @@ import Card from 'react-bootstrap/Card';
 import Carousel from 'react-bootstrap/Carousel';
 import Image from 'react-bootstrap/Image';
 
+/**
+ * Displays a Carousel of some types of flooring available.
+ */
 const HomeCarousel = () => {
     return (
         <Carousel fade>

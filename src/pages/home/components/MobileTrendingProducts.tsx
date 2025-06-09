@@ -38,7 +38,6 @@ const MobileTrendingProducts: React.FC<IComponentClass> = (
     
     //===========================================================================================================================
     useEffect(() => {
-        console.log('useeffect fired');
         setCurrentProduct(trendingProducts[0]);
     }, [trendingProducts])
 

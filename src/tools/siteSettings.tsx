@@ -1,5 +1,11 @@
+/**
+ * Site-wide settings.
+ */
 const siteSettings = {
-    webAPIUrl: 'http://localhost:5000/api'
+    /** URL to the API used in the application. */
+    webAPIUrl: window.location.origin.includes('localhost')
+        ? 'http://localhost:5000/api'
+        : '<production url>'
 }
 
 export default siteSettings;

@@ -5,10 +5,11 @@ import Row from 'react-bootstrap/Row'
 import styles from '../styles/footerContent.module.scss';
 import NewsletterSignup from "./NewsletterSignup";
 
-
+/** Footer content for non-mobile pages. */
 const NonMobileFooterContent: React.FC<IComponentClass> = (props) => {
     const navigate = useNavigate();
 
+    //===========================================================================================================================
     return (
         <Row className={`${props.className} py-3`}>
             <Col className="ms-5">

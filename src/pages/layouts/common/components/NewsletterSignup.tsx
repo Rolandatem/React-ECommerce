@@ -4,9 +4,13 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Button from 'react-bootstrap/Button';
 import { NewsletterContext } from '@/tools/contexts';
 
+/**
+ * Newsletter component used in both mobile and non-mobile footer.
+ */
 const NewsletterSignup = () => {
     const newsletterContext = useContext(NewsletterContext);
 
+    //===========================================================================================================================
     return (
         <Form onSubmit={newsletterContext?.joinNewsletter}>
             <div>Join our Newsletter!</div>

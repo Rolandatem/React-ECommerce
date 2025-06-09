@@ -18,6 +18,7 @@ interface ITrendingProductCard {
 const TrendingProductCard = ({product}: ITrendingProductCard) => {
     const navigate = useNavigate();
 
+    //===========================================================================================================================
     return (
         <Card data-bs-theme="light" 
               border="secondary" 

@@ -7,23 +7,36 @@ import FooterContent from "./FooterContent";
 import type { INewsletterProps } from "@/tools/interfaces";
 import { NewsletterContext, SiteSettingsContext } from "@/tools/contexts";
 
+/**
+ * Footer component used for the Common Layout component.
+ */
 const CommonLayoutFooter = () => {
     const [newsletterEmail, setNewsletterEmail] = useState<string>();
     const [showNewsletterDialog, setShowNewsLetterDialog] = useState<boolean>(false);
-
     const siteSettings = useContext(SiteSettingsContext);
     
+    //===========================================================================================================================
+    /**
+     * Simulates joining the newletter and displaying a modal to thank the user.
+     * @param e Form element
+     */
     const joinNewsletter = (e:React.FormEvent<HTMLFormElement>) => {
-        //const formData = new FormData(e.currentTarget);
         setShowNewsLetterDialog(true);
         e.preventDefault();
     }
 
+    //===========================================================================================================================
+    /** Closes the news letter thank you modal. */
     const closeNewsletterDialog = () => {
         setShowNewsLetterDialog(false);
         setNewsletterEmail('');
     }
 
+    //===========================================================================================================================
+    /** 
+     * Common properties used within the FooterContent and MobileFooterContent components. 
+     * Used in the NewsLetterContext context object.
+     */
     const commonProps : INewsletterProps = {
         joinNewsletter: joinNewsletter,
         email: {
@@ -32,6 +45,7 @@ const CommonLayoutFooter = () => {
         }
     }
 
+    //===========================================================================================================================
     return (
         <>
             <Container fluid className="bg-dark">

@@ -7,9 +7,13 @@ import Container from 'react-bootstrap/Container';
 import Badge from 'react-bootstrap/Badge';
 import Col from 'react-bootstrap/Col';
 
+/**
+ * Footer component used for the Common Layout component.
+ */
 const CommonLayoutHeader = () => {
     const navigate = useNavigate();
 
+    //===========================================================================================================================
     return (
         <Navbar bg='dark' data-bs-theme="dark" expand="sm">
             <Container fluid>

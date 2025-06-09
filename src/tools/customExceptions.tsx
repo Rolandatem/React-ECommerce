@@ -1,12 +1,17 @@
 import type { IAPIError } from "./interfaces";
 
+/**
+ * Custom exception used for API errors.
+ */
 export class APIError extends Error {
+    /**
+     * @param error Error information returned from the API.
+     */
     constructor(error: IAPIError) {
-        super(error.message);
-        this.exceptionMessage = error.exceptionMessage;
+        super(error.exceptionMessage);
         this.stackTrace = error.stackTrace;
     }
 
-    public exceptionMessage: string;
+    /** API Error stack trace. */
     public stackTrace: string;
 }
