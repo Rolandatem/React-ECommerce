@@ -46,7 +46,7 @@ const TrendingProductCard = ({product}: ITrendingProductCard) => {
                         Available in {product.colorCount} color(s).
                     </Card.Subtitle>
                 </ListGroup.Item>
-                <ListGroup.Item className="text-muted">
+                <ListGroup.Item className={styles.cardDescription}>
                     {product.description}
                 </ListGroup.Item>
                 <ListGroup.Item>

@@ -20,6 +20,8 @@ const TrendingProducts: React.FC<IComponentClass> = (
     //===========================================================================================================================
     /**
      * Determines the width of the element passed in including offSet and margin.
+     * @param scroller Element with a scroller.
+     * @returns Width of the scroller element.
      */
     const getCardWidth = (scroller: HTMLElement): number => {
         const card = scroller.children[0] as HTMLElement;
@@ -34,15 +36,18 @@ const TrendingProducts: React.FC<IComponentClass> = (
 
     //===========================================================================================================================
     /**
-     * Instructs the trending product scroller to go left by the number of products defined
-     * on the cardScrollMultiple member variable.
+     * Instructs the trending product scroller to go left by the number of products that
+     * can be visibly scrolled.
      */
     const goPrevCard = () => {
         if (scrollerRef.current) {
-            const cardWidth = getCardWidth(scrollerRef.current) * cardScrollMultiple;
+            const cardWidth = getCardWidth(scrollerRef.current);
+            const scrollerViewableWidth = scrollerRef.current.clientWidth;
+            const scrollCards = Math.floor(scrollerViewableWidth / cardWidth);
+            const newPosition = cardWidth * scrollCards;
 
             scrollerRef.current.scrollBy({
-                left: cardWidth * -1,
+                left: newPosition * -1,
                 behavior: 'smooth'
             });
         }
@@ -50,15 +55,18 @@ const TrendingProducts: React.FC<IComponentClass> = (
 
     //===========================================================================================================================
     /**
-     * Instructs the trending product scroller to go right by the number of products defined
-     * by the cardScrollMultiple member variable.
+     * Instructs the trending product scroller to go right by the number of products that
+     * can be visibly scrolled.
      */
     const goNextCard = () => {
         if (scrollerRef.current) {
-            const cardWidth = getCardWidth(scrollerRef.current) * cardScrollMultiple;
+            const cardWidth = getCardWidth(scrollerRef.current);
+            const scrollerViewableWidth = scrollerRef.current.clientWidth;
+            const scrollCards = Math.floor(scrollerViewableWidth / cardWidth);
+            const newPosition = cardWidth * scrollCards;
             
             scrollerRef.current.scrollBy({
-                left: cardWidth,
+                left: newPosition,
                 behavior: 'smooth'
             });
         }
