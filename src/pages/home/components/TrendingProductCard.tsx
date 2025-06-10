@@ -1,9 +1,9 @@
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
+import Image from 'react-bootstrap/Image';
 import { currencyFormatter } from '@/tools/functions';
 import type { ITrendingProduct } from '@/tools/interfaces';
 import styles from '../styles/trendingProducts.module.scss';
-import { Image } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 interface ITrendingProductCard {

@@ -9,7 +9,10 @@ import { SiteSettingsContext } from "./tools/contexts";
 
 function App() {
   const siteSettings : ISiteSettings = {
-    isMobile: useMediaQuery({maxWidth: 768})
+    isMobile: useMediaQuery({maxWidth: 768}),
+    webAPIUrl: window.location.origin.includes('localhost')
+      ? 'http://localhost:5000/api'
+      : '<production url>'
   }
 
   return (

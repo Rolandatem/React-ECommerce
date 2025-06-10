@@ -3,8 +3,8 @@ import HomeCarousel from "./components/HomeCarousel";
 import TrendingProducts from "./components/TrendingProducts";
 import { SiteSettingsContext } from "@/tools/contexts";
 import MobileTrendingProducts from "./components/MobileTrendingProducts";
-import SectionLabel from "../common/components/SectionLabel";
 import { Container } from "react-bootstrap";
+import ShopByCategory from "./components/ShopByCategory";
 
 /** Home Page Component */
 const Home = () => {
@@ -15,7 +15,8 @@ const Home = () => {
             <Container fluid className="p-0 text-dark">
                 <HomeCarousel />
 
-                <SectionLabel className="mt-5" label="Trending Products" />
+                <ShopByCategory />
+
                 {
                     siteSettings?.isMobile
                         ? <MobileTrendingProducts className="mt-3" />

@@ -5,7 +5,7 @@ interface IBusyIndicator {
     label?: string,
 
     /** Position for busy indicator. Valid values are 'absolute' and 'fixed' */
-    position?: string
+    position?: 'absolute' | 'fixed'
 }
 
 /**

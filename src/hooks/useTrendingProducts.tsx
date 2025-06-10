@@ -1,8 +1,9 @@
 import { ShipType } from "@/tools/enums";
-import siteSettings from "@/tools/siteSettings";
 import { type IError, type ITrendingProduct } from "@/tools/interfaces";
 import { APIError } from "@/tools/customExceptions";
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
+import { queryString } from "@/tools/functions";
+import { SiteSettingsContext } from "@/tools/contexts";
 
 /**
  * Iterates through the lsit of products and converts the integer value returned from
@@ -45,8 +46,8 @@ const emptyTrendingProduct: ITrendingProduct = {
 }
 //===========================================================================================================================
 
-/** Returned stateful variables from the useTrendingProducts hook. */
-interface ITrendingProductReturnStates {
+/** Returned variables from the useTrendingProducts hook. */
+interface IUseTrendingProductExports {
     /** Array of ITrendingProduct returned from the API. */
     trendingProducts: ITrendingProduct[],
     /** Flag used to determine if the API is currently working to retrieve data. */
@@ -63,7 +64,10 @@ interface ITrendingProductReturnStates {
  */
 const useTrendingProducts = ({
         withDelay = false as boolean, 
-        withError = false as boolean} = {}): ITrendingProductReturnStates => {
+        withError = false as boolean} = {}): IUseTrendingProductExports => {
+
+    //===========================================================================================================================
+    const siteSettings = useContext(SiteSettingsContext);
     const [trendingProducts, setTrendingProducts] = useState<ITrendingProduct[]>([
         {...emptyTrendingProduct, id: 1}, 
         {...emptyTrendingProduct, id: 2},
@@ -71,19 +75,21 @@ const useTrendingProducts = ({
     const [loadingTrendingProducts, setLoadingTrendingProducts] = useState<boolean>(false);
     const [trendingProductsError, setTrendingProductsError] = useState<IError>({hasError: false})
 
+    //===========================================================================================================================
     useEffect(() => {
+        const query = queryString(withDelay, withError);
         const fetchTrendingProducts = async() => {
             setLoadingTrendingProducts(true);
             try {
-                await fetch(`${siteSettings.webAPIUrl}/trendingproducts?withDelay=${withDelay}&withError=${withError}`)
+                await fetch(`${siteSettings?.webAPIUrl}/trendingproducts?${query.toString()}`)
                     .then(async response => {
+                        const json = await response.json();
                         if (response.ok === false) {
-                            const err = await response.json();
-                            console.log('APIERROR: ', err);
-                            throw new APIError(err);
+                            console.log('APIERROR: ', json);
+                            throw new APIError(json);
                         }
 
-                        return await response.json();
+                        return json;
                     })
                     .then(async json => setTrendingProducts(await swapShipType(json)));
             } catch(error) {
@@ -93,7 +99,7 @@ const useTrendingProducts = ({
 
                 setTrendingProductsError({
                     hasError: true,
-                    friendlyErrorMessage: 'Sorry, we\'re having trouble loading the Trending Products.'
+                    friendlyErrorMessage: `Sorry, we're having trouble loading the Trending Products.`
                 })
             } finally {
                 setLoadingTrendingProducts(false);
@@ -101,8 +107,9 @@ const useTrendingProducts = ({
         }
 
         fetchTrendingProducts();
-    }, [withDelay, withError])
+    }, [siteSettings?.webAPIUrl, withDelay, withError])
 
+    //===========================================================================================================================
     return { trendingProducts, loadingTrendingProducts, trendingProductsError }
 }
 

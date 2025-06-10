@@ -1,5 +1,13 @@
 import type { ShipType } from "./enums"
 
+/** Various site-wide settings. */
+export interface ISiteSettings {
+    /** Indicates whether the user is in a mobile sized page. */
+    isMobile: boolean,
+    /** URL to the API used in the application. */
+    webAPIUrl: string
+}
+
 /** Basic error response from an API calling tool. */
 export interface IError {
     /** Indicates whether an error has occurred. */
@@ -18,12 +26,6 @@ export interface IAPIError {
 
     /** Stack trace for the exception on the API. */
     stackTrace: string
-}
-
-/** Various site-wide settings. */
-export interface ISiteSettings {
-    /** Indicates whether the user is in a mobile sized page. */
-    isMobile: boolean
 }
 
 /** 
@@ -83,4 +85,16 @@ export interface ITrendingProduct {
     savingsPercentage: number,
     /** Shipping type */
     shipType: ShipType
+}
+
+/** DTO object containing category information. */
+export interface ICategory {
+    /** DB ID */
+    id: number,
+    /** Category Name */
+    name: string,
+    /** Category Image Url */
+    imageUrl: string,
+    /** Url to the category list page */
+    listPageUrl: string
 }

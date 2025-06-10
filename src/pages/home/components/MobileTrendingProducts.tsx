@@ -1,10 +1,13 @@
 import { useTrendingProducts, emptyTrendingProduct } from "@/hooks/useTrendingProducts";
 import { type ITrendingProduct, type IComponentClass } from "@/tools/interfaces";
 import { useEffect, useState } from "react";
-import { Col, Container, Row } from "react-bootstrap";
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import TrendingProductCard from "./TrendingProductCard";
 import BusyIndicator from "@/pages/common/components/BusyIndicator";
 import ErrorIndicator from "@/pages/common/components/ErrorIndicator";
+import { ListGroup } from "react-bootstrap";
 
 /**
  * Trending Product Information for Mobile devices.
@@ -43,24 +46,29 @@ const MobileTrendingProducts: React.FC<IComponentClass> = (
 
     //===========================================================================================================================
     return (
-        <Container className={className}>
-            <Row>
-                <Col xs="auto" className="pi pi-chevron-left text-dark align-self-center p-0 fs-2" role="button" onClick={goPrevCard}></Col>
+        <>
+            <ListGroup variant="flush" className={className}>
+                <ListGroup.Item>Trending Products</ListGroup.Item>
+            </ListGroup>
+            <Container className="mt-2">
+                <Row>
+                    <Col xs="auto" className="pi pi-chevron-left text-dark align-self-center p-0 fs-2" role="button" onClick={goPrevCard}></Col>
 
-                <Col className="position-relative px-0 pb-1 d-flex">
-                    <TrendingProductCard product={currentProduct} />
+                    <Col className="position-relative px-0 pb-1 d-flex">
+                        <TrendingProductCard product={currentProduct} />
 
-                    {
-                        loadingTrendingProducts && <BusyIndicator />
-                    }
-                    {
-                        trendingProductsError.hasError && <ErrorIndicator message={trendingProductsError.friendlyErrorMessage} />
-                    }
-                </Col>
+                        {
+                            loadingTrendingProducts && <BusyIndicator />
+                        }
+                        {
+                            trendingProductsError.hasError && <ErrorIndicator message={trendingProductsError.friendlyErrorMessage} />
+                        }
+                    </Col>
 
-                <Col xs="auto" className="pi pi-chevron-right text-dark align-self-center p-0 fs-2" role="button" onClick={goNextCard}></Col>
-            </Row>
-        </Container>
+                    <Col xs="auto" className="pi pi-chevron-right text-dark align-self-center p-0 fs-2" role="button" onClick={goNextCard}></Col>
+                </Row>
+            </Container>
+        </>
     )
 }
 
