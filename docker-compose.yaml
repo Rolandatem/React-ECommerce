@@ -1,0 +1,26 @@
+name: portfolio-react-ecommerce-container
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: portfolio-db
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=SomePassword#1
+    ports:
+      - "1433:1433"
+
+  webapi:
+    image: estebanfmartinez/myimages:portfolio-webapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=DockerCompose
+    depends_on:
+      - mssql
+    ports:
+      - "5000:5000"
+
+  ecommerce:
+    image: estebanfmartinez/myimages:portfolio-react-ecommerce
+    depends_on:
+      - webapi
+    ports:
+      - "3000:3000"
