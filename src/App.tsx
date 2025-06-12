@@ -6,6 +6,7 @@ import 'primeicons/primeicons.css';
 import { useMediaQuery } from "react-responsive";
 import type { ISiteSettings } from "./tools/interfaces";
 import { SiteSettingsContext } from "./tools/contexts";
+import AboutUs from "./pages/aboutus/AboutUs";
 
 function App() {
   const siteSettings : ISiteSettings = {
@@ -21,6 +22,7 @@ function App() {
         <Routes>
           <Route path="/" element={<CommonLayout />}>
             <Route index element={<Home />} />
+            <Route path='/aboutus' element={<AboutUs />} />
             <Route path="*" element={<NotFound404 />} />
           </Route>
         </Routes>

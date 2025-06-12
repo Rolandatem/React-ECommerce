@@ -17,9 +17,9 @@ const MobileFooterContent: React.FC<IComponentClass> = (props) => {
             <Accordion.Item eventKey="0">
                 <Accordion.Header>Quick Links</Accordion.Header>
                 <Accordion.Body>
-                    <div onClick={() => navigate('/contactus')}>Contact Us</div>
-                    <div onClick={() => navigate('/aboutus')}>About Us</div>
-                    <div onClick={() => navigate('/faqs')}>FAQs</div>
+                    <div role='button' onClick={() => navigate('/contactus')}>Contact Us</div>
+                    <div role='button' onClick={() => navigate('/aboutus')}>About Us</div>
+                    <div role='button' onClick={() => navigate('/faqs')}>FAQs</div>
                 </Accordion.Body>
             </Accordion.Item>
             

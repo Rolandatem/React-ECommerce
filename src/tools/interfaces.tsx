@@ -34,7 +34,7 @@ export interface IAPIError {
  */
 export interface IComponentClass {
     /** className attribute to pass through to component. */
-    className: string
+    className?: string
 }
 
 /**

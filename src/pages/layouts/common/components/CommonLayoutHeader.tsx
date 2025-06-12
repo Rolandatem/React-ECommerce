@@ -15,14 +15,14 @@ const CommonLayoutHeader = () => {
 
     //===========================================================================================================================
     return (
-        <Navbar bg='dark' data-bs-theme="dark" expand="sm">
+        <Navbar bg='dark' data-bs-theme="dark" expand="md">
             <Container fluid className='align-items-start'>
                 
                 {/* COMPANY BRAND */}
                 <Col xs="3" className={styles.leftSideHeader}>
                     <div onClick={() => navigate('/')} role='button' className={`d-inline ${styles.brand}`}>
                         <span className='pi pi-building-columns'></span>
-                        <span className='ms-2 d-none d-md-inline font-roboto'>Martinez Flooring</span>
+                        <span className='ms-2 d-none d-lg-inline font-roboto'>Martinez Flooring</span>
                     </div>
                 </Col>
 
@@ -47,7 +47,7 @@ const CommonLayoutHeader = () => {
                                     resource 2
                                 </NavDropdown.Item>
                             </NavDropdown>
-                            <Nav.Link onClick={() => navigate('/contactus')}>
+                            <Nav.Link className='text-nowrap' onClick={() => navigate('/contactus')}>
                                 Contact Us
                             </Nav.Link>
                         </Nav>
