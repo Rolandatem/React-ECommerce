@@ -6,14 +6,13 @@ import { SiteSettingsContext } from "@/tools/contexts";
 import type { ICategory } from "@/tools/interfaces";
 import { useContext, useEffect, useState } from "react";
 import Accordion from 'react-bootstrap/Accordion';
-import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import ListGroup from 'react-bootstrap/ListGroup';
-import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import { useNavigate } from "react-router-dom";
+import ShopByCategoryDemoModal from "@/pages/common/components/ShopByCategoryDemoModal";
 
 /** Displays the Shop By Category section for the home page. */
 const ShopByCategory = () => {
@@ -110,28 +109,8 @@ const ShopByCategory = () => {
                 </Accordion>
             }
 
-            {/* //=========================================================================================================================== */}
-            {/* Modal letting the user know that only the 'All Flooring' category is allowed. */}
-            {/* //=========================================================================================================================== */}
-            <Modal show={demoCategoryModalIsVisible} centered size="lg" onHide={() => setDemoCategoryModalIsVisible(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Demo Category List Page</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <p>
-                        Sorry, but to keep this demo small the available option is to use the
-                        'All Flooring' category option.
-                    </p>
-                    <div className="d-flex justify-content-center w-100">
-                        <Button variant="secondary" onClick={() => navigate('/product/all')}>
-                            All Flooring Category List Page
-                        </Button>
-                    </div>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setDemoCategoryModalIsVisible(false)}>Close</Button>
-                </Modal.Footer>
-            </Modal>
+            <ShopByCategoryDemoModal isVisible={demoCategoryModalIsVisible} setIsVisible={setDemoCategoryModalIsVisible} />
+
         </>
     )
 }
