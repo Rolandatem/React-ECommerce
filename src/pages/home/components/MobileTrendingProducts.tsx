@@ -1,13 +1,14 @@
 import { useTrendingProducts, emptyTrendingProduct } from "@/hooks/useTrendingProducts";
-import { type ITrendingProduct, type IComponentClass } from "@/tools/interfaces";
 import { useEffect, useState } from "react";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import ListGroup from 'react-bootstrap/ListGroup';
 import TrendingProductCard from "./TrendingProductCard";
 import BusyIndicator from "@/pages/common/components/BusyIndicator";
 import ErrorIndicator from "@/pages/common/components/ErrorIndicator";
-import { ListGroup } from "react-bootstrap";
+import type IComponentClass from "@/tools/interfaces/IComponentClass";
+import type ITrendingProduct from "@/tools/interfaces/ITrendingProduct";
 
 /**
  * Trending Product Information for Mobile devices.

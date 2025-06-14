@@ -1,6 +1,5 @@
 import { useTrendingProducts } from "@/hooks/useTrendingProducts";
 import TrendingProductCard from "./TrendingProductCard";
-import type { IComponentClass, ITrendingProduct } from "@/tools/interfaces";
 import { useRef } from "react";
 import BusyIndicator from "@/pages/common/components/BusyIndicator";
 import ErrorIndicator from "@/pages/common/components/ErrorIndicator";
@@ -8,6 +7,8 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import SectionLabel from "@/pages/common/components/SectionLabel";
+import type IComponentClass from "@/tools/interfaces/IComponentClass";
+import type ITrendingProduct from "@/tools/interfaces/ITrendingProduct";
 
 /**
  * Trending Product Information.

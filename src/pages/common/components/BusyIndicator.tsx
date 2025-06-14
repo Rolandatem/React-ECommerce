@@ -1,12 +1,5 @@
+import type IBusyIndicator from "@/tools/interfaces/IBusyIndicator";
 import { Spinner } from "react-bootstrap";
-
-interface IBusyIndicator {
-    /** Text to display in busy indicator. */
-    label?: string,
-
-    /** Position for busy indicator. Valid values are 'absolute' and 'fixed' */
-    position?: 'absolute' | 'fixed'
-}
 
 /**
  * Displays an indicator with a transparent background.

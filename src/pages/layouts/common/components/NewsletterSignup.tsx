@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Button from 'react-bootstrap/Button';
-import { NewsletterContext } from '@/tools/contexts';
+import NewsletterContext from '@/tools/contexts/NewsletterContext';
 
 /**
  * Newsletter component used in both mobile and non-mobile footer.

@@ -1,9 +1,11 @@
-import { ShipType } from "@/tools/enums";
-import { type IError, type ITrendingProduct } from "@/tools/interfaces";
-import { APIError } from "@/tools/customExceptions";
+import SiteSettingsContext from "@/tools/contexts/SiteSettingsContext";
+import ShipType from "@/tools/enums/ShipType";
+import APIError from "@/tools/exceptions/APIError";
+import queryString from "@/tools/functions/queryString";
+import type IError from "@/tools/interfaces/IError";
+import type ITrendingProduct from "@/tools/interfaces/ITrendingProduct";
+import type IUseTrendingProductExports from "@/tools/interfaces/IUseTrendingProductExports";
 import { useContext, useEffect, useState } from "react"
-import { queryString } from "@/tools/functions";
-import { SiteSettingsContext } from "@/tools/contexts";
 
 /**
  * Iterates through the lsit of products and converts the integer value returned from
@@ -44,19 +46,8 @@ const emptyTrendingProduct: ITrendingProduct = {
     savingsPercentage: 0,
     shipType: ShipType.None
 }
-//===========================================================================================================================
 
-/** Returned variables from the useTrendingProducts hook. */
-interface IUseTrendingProductExports {
-    /** Array of ITrendingProduct returned from the API. */
-    trendingProducts: ITrendingProduct[],
-    /** Flag used to determine if the API is currently working to retrieve data. */
-    loadingTrendingProducts: boolean,
-    /** Contains API error information if any. */
-    trendingProductsError: IError
-}
 //===========================================================================================================================
-
 /**
  * Hook used to retrieve trending product information from the API.
  * @param withDelay Optional parameter that allows testing with a 2 second latency. Default false.

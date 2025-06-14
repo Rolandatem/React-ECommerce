@@ -4,9 +4,10 @@ import CommonLayout from "./pages/layouts/common/CommonLayout"
 import Home from "./pages/home/Home"
 import 'primeicons/primeicons.css';
 import { useMediaQuery } from "react-responsive";
-import type { ISiteSettings } from "./tools/interfaces";
-import { SiteSettingsContext } from "./tools/contexts";
 import AboutUs from "./pages/aboutus/AboutUs";
+import ContactUs from "./pages/contactus/ContactUs";
+import type ISiteSettings from "./tools/interfaces/ISiteSettings";
+import SiteSettingsContext from "./tools/contexts/SiteSettingsContext";
 
 function App() {
   const siteSettings : ISiteSettings = {
@@ -23,6 +24,7 @@ function App() {
           <Route path="/" element={<CommonLayout />}>
             <Route index element={<Home />} />
             <Route path='/aboutus' element={<AboutUs />} />
+            <Route path='/contactus' element={<ContactUs />} />
             <Route path="*" element={<NotFound404 />} />
           </Route>
         </Routes>

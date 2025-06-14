@@ -1,7 +1,9 @@
-import { SiteSettingsContext } from "@/tools/contexts";
-import { APIError } from "@/tools/customExceptions";
-import { queryString } from "@/tools/functions";
-import type { ICategory, IError } from "@/tools/interfaces";
+import SiteSettingsContext from "@/tools/contexts/SiteSettingsContext";
+import APIError from "@/tools/exceptions/APIError";
+import queryString from "@/tools/functions/queryString";
+import type ICategory from "@/tools/interfaces/ICategory";
+import type IError from "@/tools/interfaces/IError";
+import type IUseCategoriesExports from "@/tools/interfaces/IUseCategoriesExports";
 import { useContext, useEffect, useState } from "react";
 
 /**
@@ -15,12 +17,8 @@ const emptyCategory : ICategory = {
     listPageUrl: ''
 }
 
-interface IUseCategoriesExports {
-    categories: ICategory[],
-    loadingCategories: boolean,
-    categoriesError: IError
-}
-
+//===========================================================================================================================
+/** Hook for the Category API Endpoint. */
 const useCategories = ({
     withDelay = false as boolean,
     withError = false as boolean} = {}) : IUseCategoriesExports => {

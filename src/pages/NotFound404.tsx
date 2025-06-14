@@ -1,10 +1,10 @@
-import { SiteSettingsContext } from "@/tools/contexts";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
+import SiteSettingsContext from "@/tools/contexts/SiteSettingsContext";
 
 /**
  * Page displayed to user when a unidentified page is requested.

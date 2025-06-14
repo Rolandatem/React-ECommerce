@@ -4,8 +4,9 @@ import Container from 'react-bootstrap/Container';
 import Modal from 'react-bootstrap/Modal';
 import MobileFooterContent from "./MobileFooterContent";
 import FooterContent from "./FooterContent";
-import type { INewsletterProps } from "@/tools/interfaces";
-import { NewsletterContext, SiteSettingsContext } from "@/tools/contexts";
+import SiteSettingsContext from "@/tools/contexts/SiteSettingsContext";
+import type INewsletterProps from "@/tools/interfaces/INewsletterProps";
+import NewsletterContext from "@/tools/contexts/NewsletterContext";
 
 /**
  * Footer component used for the Common Layout component.

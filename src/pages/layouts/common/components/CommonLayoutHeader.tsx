@@ -8,8 +8,8 @@ import Badge from 'react-bootstrap/Badge';
 import Col from 'react-bootstrap/Col';
 import useCategories from '@/hooks/useCategories';
 import { useEffect, useState } from 'react';
-import { type ICategory } from '@/tools/interfaces';
 import ShopByCategoryDemoModal from '@/pages/common/components/ShopByCategoryDemoModal';
+import type ICategory from '@/tools/interfaces/ICategory';
 
 /**
  * Footer component used for the Common Layout component.
@@ -20,6 +20,7 @@ const CommonLayoutHeader = () => {
     const { categories } = useCategories();
     const [displayCategories, setDisplayCategories] = useState<ICategory[]>([]);
     const [demoCategoryModalIsVisible, setDemoCategoryModalIsVisible] = useState<boolean>(false);
+    const [navBarIsExpanded, setNavBarIsExpanded] = useState<boolean>(false);
 
     //===========================================================================================================================
     /**
@@ -34,7 +35,22 @@ const CommonLayoutHeader = () => {
             return;
         }
 
-        navigate(listPageUrl);
+        navigateTo(listPageUrl);
+    }
+
+    /**
+     * Navigates the user to the specified url and closes the hamburger
+     * menu when in mobile mode so it doesn't look goofy.
+     * @param url Address to navigate to.
+     */
+    const navigateTo = (url: string) => {
+        navigate(url);
+        setNavBarIsExpanded(false);
+    }
+
+    /** Because of the above function we need to handle the toggle event now. */
+    const onNavbarToggle = () => {
+        setNavBarIsExpanded(!navBarIsExpanded);
     }
 
     //===========================================================================================================================
@@ -51,12 +67,12 @@ const CommonLayoutHeader = () => {
     //===========================================================================================================================
     return (
         <>
-            <Navbar bg='dark' data-bs-theme="dark" expand="md">
+            <Navbar bg='dark' data-bs-theme="dark" expand="md" expanded={navBarIsExpanded} onToggle={onNavbarToggle}>
                 <Container fluid className='align-items-start'>
                     
                     {/* COMPANY BRAND */}
-                    <Col xs="3" className={styles.leftSideHeader}>
-                        <div onClick={() => navigate('/')} role='button' className={`d-inline ${styles.brand}`}>
+                    <Col xs={2} md={3} className={styles.leftSideHeader}>
+                        <div onClick={() => navigate('/')} role='button' className={styles.brand}>
                             <span className='pi pi-building-columns'></span>
                             <span className='ms-2 d-none d-lg-inline font-roboto'>Martinez Flooring</span>
                         </div>
@@ -70,7 +86,7 @@ const CommonLayoutHeader = () => {
                                 <NavDropdown title='Flooring by Category'>
                                     {
                                         displayCategories.map((cat) => (
-                                            <NavDropdown.Item key={cat.id} onClick={() => goToListPage(cat.listPageUrl)}>
+                                            <NavDropdown.Item key={cat.id} onClick={() => goToListPage(cat.listPageUrl)} className='text-wrap'>
                                                 {cat.name}
                                             </NavDropdown.Item>
                                         ))
@@ -84,7 +100,7 @@ const CommonLayoutHeader = () => {
                                         resource 2
                                     </NavDropdown.Item>
                                 </NavDropdown>
-                                <Nav.Link className='text-nowrap' onClick={() => navigate('/contactus')}>
+                                <Nav.Link className='text-nowrap' onClick={() => navigateTo('/contactus')}>
                                     Contact Us
                                 </Nav.Link>
                             </Nav>
@@ -92,7 +108,7 @@ const CommonLayoutHeader = () => {
                     </Col>
 
                     {/* SHOPPING CART */}
-                    <Col className={styles.rightSideHeader} xs="3">
+                    <Col xs={2} md={3} className={styles.rightSideHeader}>
                         <div role='button' className='d-inline'>
                             <span className={`pi pi-shopping-cart ${styles.cart}`}></span>
                             <Badge pill>9</Badge>

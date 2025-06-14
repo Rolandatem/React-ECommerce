@@ -1,11 +1,9 @@
-import type { IComponentClass } from "@/tools/interfaces";
-import { Card, Col, Container, Row } from "react-bootstrap";
 import styles from '../styles/sectionLabel.module.scss';
-
-interface ISectionLabelComponent extends IComponentClass {
-    /** Label to display. */
-    label: string
-}
+import type ISectionLabel from "@/tools/interfaces/ISectionLabel";
+import Card from 'react-bootstrap/Card';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 /**
  * Used to display sections.
@@ -14,7 +12,7 @@ interface ISectionLabelComponent extends IComponentClass {
  * @param className Classes to use on component parent object.
  * @param label Label to display.
  */
-const SectionLabel: React.FC<ISectionLabelComponent> = (props) => {
+const SectionLabel: React.FC<ISectionLabel> = (props) => {
     return (
         <Container className={props.className}>
             <Row>

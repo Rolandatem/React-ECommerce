@@ -1,0 +1,11 @@
+@import '@/assets/globals.scss';
+
+.contactFormDescription {
+    height: 100px !important;
+}
+
+@include media-breakpoint-up(lg) {
+    .contactFormDescription {
+        height: 200px !important;
+    }
+}

@@ -10,16 +10,30 @@
 .rightSideHeader {
     @extend .leftSideHeader;
     @extend .justify-content-end;
+
+    height: 40px;
 }
 
 .brand,
 .cart {
-    @extend .fs-2;
-    @extend .fs-lg-4;
-
+    font-size: var(--bs-font-size-2);
     color: #DEDAD6;
 
     &:hover {
         color: $gray-100;
+    }
+}
+
+@media (min-width:map-get($grid-breakpoints, lg)) {
+    .brand,
+    .cart {
+        font-size: var(--bs-font-size-4);
+    }
+}
+
+@media (min-width:map-get($grid-breakpoints, xl)) {
+    .brand,
+    .cart {
+        font-size: var(--bs-font-size-2);
     }
 }

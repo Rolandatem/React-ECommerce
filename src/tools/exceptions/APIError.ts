@@ -1,9 +1,9 @@
-import type { IAPIError } from "./interfaces";
+import type IAPIError from "../interfaces/IAPIError";
 
 /**
  * Custom exception used for API errors.
  */
-export class APIError extends Error {
+export default class APIError extends Error {
     /**
      * @param error Error information returned from the API.
      */

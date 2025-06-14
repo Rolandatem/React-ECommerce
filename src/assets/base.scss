@@ -4,9 +4,12 @@
 @import '@modules/bootstrap/scss/mixins';
 
 $font-sizes: map-merge($font-sizes, (
-    7: $font-size-base * 0.75,
-    8: $font-size-base * 0.5
+    7: $font-size-base * 0.875,
+    8: $font-size-base * 0.75,
+    9: $font-size-base * 0.625
 ));
+
+$enable-negative-margins: true;
 
 @import '@modules/bootstrap/scss/maps';
 @import '@modules/bootstrap/scss/utilities';
@@ -16,6 +19,46 @@ $utilities: map-merge(
         "font-size": map-merge(
             map-get($utilities, "font-size"), (responsive: true),
         ),
+    )
+);
+
+// Table border spacing for when border-separate is used.
+$utilities: map-merge(
+    $utilities, (
+        "border-spacing": (
+            property: border-spacing,
+            class: border-spacing,
+            values: (
+                0: 0px,
+                1: 5px,
+                2: 10px,
+                3: 15px,
+                4: 20px,
+                5: 25px
+            )
+        )
+    )
+);
+
+/*
+    Generate border spacing tool for pixels between 0-100. Example:
+    border-spacing-p-10 => border-spacing: 10px;
+    border-spacing-p-23 => border-spacing: 23px
+    where 'p' just signifies the use of pixels.
+*/
+$border-spacing-p: ();
+@for $i from 0 through 100 {
+    $border-spacing-p: map-merge(
+        $border-spacing-p, (#{$i}: #{$i}px)
+    );
+};
+$utilities: map-merge(
+    $utilities, (
+        "border-spacing-p": (
+            property: border-spacing,
+            class: border-spacing-p,
+            values: $border-spacing-p
+        )
     )
 );
 

@@ -1,10 +1,4 @@
-interface IErrorIndicator {
-    /** Message to display to user. */
-    message?: string,
-
-    /** Position for busy indicator. Valid values are 'absolute' and 'fixed' */
-    position?: 'absolute' | 'fixed'
-}
+import type IErrorIndicator from "@/tools/interfaces/IErrorIndicator";
 
 /**
  * Display an error indicator with a transparent background.

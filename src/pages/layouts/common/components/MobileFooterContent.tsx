@@ -1,8 +1,8 @@
 import type React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { type IComponentClass } from '@/tools/interfaces';
 import Accordion from 'react-bootstrap/Accordion';
 import NewsletterSignup from './NewsletterSignup';
+import type IComponentClass from '@/tools/interfaces/IComponentClass';
 
 /**
  * Footer content for mobile pages.

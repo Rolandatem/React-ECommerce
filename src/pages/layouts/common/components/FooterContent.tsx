@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import { type IComponentClass } from "@/tools/interfaces";
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row'
 import styles from '../styles/footerContent.module.scss';
 import NewsletterSignup from "./NewsletterSignup";
+import type IComponentClass from "@/tools/interfaces/IComponentClass";
 
 /** Footer content for non-mobile pages. */
 const NonMobileFooterContent: React.FC<IComponentClass> = (props) => {

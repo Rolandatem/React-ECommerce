@@ -1,13 +1,7 @@
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom';
-
-interface IShopByCategoryDemoModal {
-    /** Indicates that the modal should be visible. */
-    isVisible: boolean,
-    /** Function to set the modal visibility state. */
-    setIsVisible: React.Dispatch<React.SetStateAction<boolean>>
-}
+import type IShopByCategoryDemoModal from '@/tools/interfaces/IShopByCategoryDemoModal';
 
 /**
  * Modal letting the user know that only the 'All Flooring' category

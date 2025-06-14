@@ -2,8 +2,6 @@ import useCategories from "@/hooks/useCategories";
 import BusyIndicator from "@/pages/common/components/BusyIndicator";
 import ErrorIndicator from "@/pages/common/components/ErrorIndicator";
 import SectionLabel from "@/pages/common/components/SectionLabel";
-import { SiteSettingsContext } from "@/tools/contexts";
-import type { ICategory } from "@/tools/interfaces";
 import { useContext, useEffect, useState } from "react";
 import Accordion from 'react-bootstrap/Accordion';
 import Card from 'react-bootstrap/Card';
@@ -13,6 +11,8 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Row from 'react-bootstrap/Row';
 import { useNavigate } from "react-router-dom";
 import ShopByCategoryDemoModal from "@/pages/common/components/ShopByCategoryDemoModal";
+import SiteSettingsContext from "@/tools/contexts/SiteSettingsContext";
+import type ICategory from "@/tools/interfaces/ICategory";
 
 /** Displays the Shop By Category section for the home page. */
 const ShopByCategory = () => {
@@ -98,7 +98,7 @@ const ShopByCategory = () => {
                             <ListGroup>
                                 {
                                     displayCategories.map((cat) => (
-                                        <ListGroup.Item onClick={() => goToListPage(cat.listPageUrl)}>
+                                        <ListGroup.Item key={cat.id} onClick={() => goToListPage(cat.listPageUrl)}>
                                             {cat.name}
                                         </ListGroup.Item>
                                     ))

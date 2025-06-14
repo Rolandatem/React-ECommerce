@@ -1,11 +1,15 @@
-import { Card, Col, Container, Image, Row } from "react-bootstrap";
+import Card from 'react-bootstrap/Card';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Image from 'react-bootstrap/Image';
 import SectionLabel from "../common/components/SectionLabel";
 
 /** About Us Page Component */
 const AboutUs = () => {
     return (
         <>
-            <Container fluid className="mt-5 p-0">
+            <Container fluid className="p-0 mt-n5">
                 <Image src="/banners/about_us.webp" fluid />
             </Container>
 

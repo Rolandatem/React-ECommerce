@@ -1,15 +1,10 @@
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Image from 'react-bootstrap/Image';
-import { currencyFormatter } from '@/tools/functions';
-import type { ITrendingProduct } from '@/tools/interfaces';
 import styles from '../styles/trendingProducts.module.scss';
 import { useNavigate } from 'react-router-dom';
-
-interface ITrendingProductCard {
-    /** Product to display in card. */
-    product: ITrendingProduct
-}
+import type ITrendingProductCard from '@/tools/interfaces/ITrendingProductCard';
+import currencyFormatter from '@/tools/functions/currencyFormatter';
 
 /**
  * Displays trending product info on a Card.

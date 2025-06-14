@@ -1,10 +1,10 @@
 import { useContext } from "react";
 import HomeCarousel from "./components/HomeCarousel";
 import TrendingProducts from "./components/TrendingProducts";
-import { SiteSettingsContext } from "@/tools/contexts";
 import MobileTrendingProducts from "./components/MobileTrendingProducts";
-import { Container } from "react-bootstrap";
 import ShopByCategory from "./components/ShopByCategory";
+import SiteSettingsContext from "@/tools/contexts/SiteSettingsContext";
+import Container from 'react-bootstrap/Container';
 
 /** Home Page Component */
 const Home = () => {
@@ -12,7 +12,7 @@ const Home = () => {
 
     return (
         <>
-            <Container fluid className="p-0 text-dark">
+            <Container fluid className="p-0 text-dark mt-n5">
                 <HomeCarousel />
 
                 <ShopByCategory />

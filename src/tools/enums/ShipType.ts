@@ -1,9 +1,8 @@
 /**
  * Enumeration-ish class for shipping type.
  */
-export class ShipType {
+export default class ShipType {
     /**
-     * 
      * @param value Value to assign the ship type.
      * @param imageUrl URL to the image for the ship type.
      */
