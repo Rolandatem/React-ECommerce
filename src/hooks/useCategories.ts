@@ -1,10 +1,11 @@
 import SiteSettingsContext from "@/tools/contexts/SiteSettingsContext";
-import APIError from "@/tools/exceptions/APIError";
+import asFriendlyError from "@/tools/functions/asFriendlyError";
 import queryString from "@/tools/functions/queryString";
 import type ICategory from "@/tools/interfaces/ICategory";
 import type IError from "@/tools/interfaces/IError";
-import type IUseCategoriesExports from "@/tools/interfaces/IUseCategoriesExports";
-import { useContext, useEffect, useState } from "react";
+import type IFriendlyError from "@/tools/interfaces/IFriendlyError";
+import type ITestOptions from "@/tools/interfaces/ITestOptions";
+import { useCallback, useContext, useState } from "react";
 
 /**
  * An empty category used as a placeholder category visually to the
@@ -16,12 +17,14 @@ const emptyCategory : ICategory = {
     imageUrl: 'categories/empty.webp',
     listPageUrl: ''
 }
+//===========================================================================================================================
+const defaultErrorState: IFriendlyError = {hasError: false, friendlyErrorMessage: ''};
 
 //===========================================================================================================================
 /** Hook for the Category API Endpoint. */
-const useCategories = ({
-    withDelay = false as boolean,
-    withError = false as boolean} = {}) : IUseCategoriesExports => {
+const useCategories = (
+    /** Indicates which API test options to use. */
+    options: ITestOptions = {withDelay: false, withError: false}) => {
 
     //===========================================================================================================================
     const siteSettings = useContext(SiteSettingsContext);
@@ -31,41 +34,45 @@ const useCategories = ({
         {...emptyCategory, id: 3}]);
     const [loadingCategories, setLoadingCategories] = useState<boolean>(false);
     const [categoriesError, setCategoriesError] = useState<IError>({hasError: false});
+    const query = queryString(options);
 
     //===========================================================================================================================
-    useEffect(() => {
-        const query = queryString(withDelay, withError);
-        const fetchCategories = async() => {
-            setLoadingCategories(true);
-            try {
-                await fetch (`${siteSettings?.webAPIUrl}/category?${query.toString()}`)
-                    .then(async response => {
-                        const json = await response.json();
-                        if (response.ok === false) {
-                            console.log('APIERROR: ', json);
-                            throw new APIError(json);
-                        }
-                        setCategories(json);
-                    });
-            } catch (error) {
-                if (error instanceof APIError === false) {
-                    console.log('Unhandled: ', error);
-                }
+    /** Loads product categories. */
+    const loadCategories = useCallback(async() => {
+        setLoadingCategories(true);
+        setCategoriesError(defaultErrorState);
 
-                setCategoriesError({
-                    hasError: true,
-                    friendlyErrorMessage: `Sorry, we're having trouble loading Categoryies.`
-                })
-            } finally {
-                setLoadingCategories(false);
-            }
-        };
+        try {
+            const endpoint = `${siteSettings?.webAPIUrl}/category?${query.toString()}`;
+            const response = await fetch(endpoint);
 
-        fetchCategories();
-    }, [siteSettings?.webAPIUrl, withDelay, withError])
+            if (response.ok === false) { throw new Error('Failed to fetch Categories.'); }
+
+            let data: ICategory[] = await response.json();
+
+            //--Inject fake 'All Flooring' category.
+            data = [{
+                id: 0,
+                name: 'All Flooring',
+                imageUrl: 'categories/all_flooring.webp',
+                listPageUrl: 'product/all'                    
+            }, ...data];
+
+            setCategories(data);
+        } catch (error) {
+            setCategoriesError(asFriendlyError(error, `Sorry, we're having trouble loading Categories.`));
+        } finally {
+            setLoadingCategories(false);
+        }
+    }, [query, siteSettings?.webAPIUrl])
     
     //===========================================================================================================================
-    return { categories, loadingCategories, categoriesError }
+    return { 
+        categories, 
+        loadingCategories, 
+        categoriesError,
+        loadCategories
+    }
 }
 
 export default useCategories;

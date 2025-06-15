@@ -1,7 +1,6 @@
 import SectionLabel from "../common/components/SectionLabel";
 import useFAQs from "@/hooks/useFAQs";
 import { useEffect, useState } from "react";
-import type IFAQ from "@/tools/interfaces/IFAQ";
 import BusyIndicator from "../common/components/BusyIndicator";
 import ErrorIndicator from "../common/components/ErrorIndicator";
 import { useNavigate } from "react-router-dom";
@@ -23,8 +22,7 @@ const defaultAlert: IBasicAlert = {
 
 //===========================================================================================================================
 const FAQs = () => {
-    const {loadingFAQs, faqsError, getFAQs, castFAQVote} = useFAQs();
-    const [faqs, setFAQs] = useState<IFAQ[]>([]);
+    const {faqs, setFAQs, loadingFAQs, faqsError, loadFAQs, castFAQVote} = useFAQs();
     const [alert, setAlert] = useState<IBasicAlert>(defaultAlert);
     const [faqVotes, setFAQVotes] = useState<{[faqId: number]: "up" | "down"}>({});
     const navigate = useNavigate();
@@ -56,7 +54,7 @@ const FAQs = () => {
 
         //--Update count locally.
         setFAQs(prev => (
-            prev.map(faq => (
+            prev?.map(faq => (
                 faq.id === faqId
                     ? {
                         ...faq,
@@ -79,13 +77,12 @@ const FAQs = () => {
 
     //===========================================================================================================================
     useEffect(() => {
-        const fetchFAQs = async() => {
-            const faqsResponse = await getFAQs(true);
-            setFAQs(faqsResponse);
+        const loader = async() => {
+            await loadFAQs(true);
         }
 
-        fetchFAQs();
-    }, [getFAQs])
+        loader();
+    }, [loadFAQs])
 
     //===========================================================================================================================
     return (
@@ -105,8 +102,8 @@ const FAQs = () => {
                     <Col className="position-relative" style={{minHeight: '100px'}}>
                         <Accordion>
                             {
-                                faqs.map((faq) => (
-                                    <Accordion.Item key={faq.id} eventKey={faq.id.toString()}>
+                                faqs?.map((faq) => (
+                                    <Accordion.Item className="" key={faq.id} eventKey={faq.id.toString()}>
                                         <Accordion.Header>{faq.question}</Accordion.Header>
                                         <Accordion.Body>
                                             <div>{faq.answer}</div>

@@ -4,29 +4,29 @@ import queryString from "@/tools/functions/queryString";
 import type IFAQ from "@/tools/interfaces/IFAQ";
 import type IFriendlyError from "@/tools/interfaces/IFriendlyError";
 import type ITestOptions from "@/tools/interfaces/ITestOptions";
-import { useCallback, useContext, useMemo, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 
 //===========================================================================================================================
 const defaultErrorState: IFriendlyError = {hasError: false, friendlyErrorMessage: ''};
 
 //===========================================================================================================================
-const useFAQs = ({
-    withDelay = false,
-    withError = false}: ITestOptions = {}) => {
+/** Hook used to communicate with the FAQs API Endpoint. */
+const useFAQs = (
+    /** Indicates which API test options to use. */
+    options: ITestOptions = {withDelay: false, withError: false}) => {
 
     //===========================================================================================================================
     const siteSettings = useContext(SiteSettingsContext);
+    const [faqs, setFAQs] = useState<IFAQ[]>();
     const [loadingFAQs, setLoadingFAQs] = useState<boolean>(false);
     const [faqsError, setFAQsError] = useState<IFriendlyError>(defaultErrorState);
+    const query = queryString(options);
 
     //===========================================================================================================================
-    const query = useMemo(() =>
-        queryString(withError, withDelay),
-        [withDelay, withError]);
-
-    //===========================================================================================================================
-    const getFAQs = useCallback(async(
-        topten: boolean = false): Promise<IFAQ[]> => {
+    /** Loads all FAQ's from the API. */
+    const loadFAQs = useCallback(async(
+        /** Flag used to indicate that you want the top 10 instead of all. */
+        topten: boolean = false) => {
         
         setLoadingFAQs(true);
         setFAQsError(defaultErrorState);
@@ -38,17 +38,18 @@ const useFAQs = ({
             if (response.ok === false) { throw new Error('Failed to fetch FAQs.'); }
 
             const data: IFAQ[] = await response.json();
-            return data;
+            setFAQs(data);
         } catch (error) {
             setFAQsError(asFriendlyError(error, "Sorry, we are having trouble loading FAQs.'"));
-            return []
         } finally {
             setLoadingFAQs(false);
         }
     }, [query, siteSettings?.webAPIUrl])
 
     //===========================================================================================================================
+    /** Gets a FAQ by it's ID. */
     const getFAQById = useCallback(async(
+        /** FAQ ID */
         id: number): Promise<IFAQ | null> => {
         
         setLoadingFAQs(true);
@@ -71,9 +72,12 @@ const useFAQs = ({
     }, [query, siteSettings?.webAPIUrl])
 
     //===========================================================================================================================
+    /** Notifies API of a FAQ helpful vote. */
     const castFAQVote = useCallback(async(
+        /** FAQ ID */
         id:number,
-        voteType: string): Promise<IFriendlyError> => {
+        /** Vote type */
+        voteType: "up" | "down"): Promise<IFriendlyError> => {
 
         try {
             const endpoint = `${siteSettings?.webAPIUrl}/faqs/${id}/vote/${voteType}?${query.toString()}`;
@@ -89,9 +93,11 @@ const useFAQs = ({
 
     //===========================================================================================================================
     return {
+        faqs,
+        setFAQs,
         loadingFAQs,
         faqsError,
-        getFAQs,
+        loadFAQs,
         getFAQById,
         castFAQVote
     }

@@ -1,18 +1,25 @@
+import memoize from 'lodash.memoize';
+import type ITestOptions from '../interfaces/ITestOptions';
+
 /**
  * Creates a pre-set URLSearchParams object with testable options.
- * @param withDelay Indicates whether to use the 2 second latency test.
- * @param withError Indicates whether to use the API exception test.
- * @returns 
+ * @param options Indicates which API test options to use.
  */
-const queryString = (
-    withDelay: boolean = false,
-    withError: boolean = false): URLSearchParams => {
-    const returnTool = new URLSearchParams();
+const queryString = memoize((
+    options: ITestOptions): URLSearchParams => {
+    const params = new URLSearchParams();
 
-    if (withDelay) { returnTool.append('withDelay', withDelay.toString()); }
-    if (withError) { returnTool.append('withError', withError.toString()); }
+    if (options.withDelay) { params.append('withDelay', options.withDelay.toString()); }
+    if (options.withError) { params.append('withError', options.withError.toString()); }
 
-    return returnTool;
-}
+    return params;
+},
+    //-- Use a stable JSON key
+    (options: ITestOptions = {}) => {
+        return JSON.stringify({
+            withDelay: !!options.withDelay,
+            withError: !!options.withError
+        })
+    });
 
 export default queryString;

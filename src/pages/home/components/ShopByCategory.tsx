@@ -12,14 +12,12 @@ import Row from 'react-bootstrap/Row';
 import { useNavigate } from "react-router-dom";
 import ShopByCategoryDemoModal from "@/pages/common/components/ShopByCategoryDemoModal";
 import SiteSettingsContext from "@/tools/contexts/SiteSettingsContext";
-import type ICategory from "@/tools/interfaces/ICategory";
 
 /** Displays the Shop By Category section for the home page. */
 const ShopByCategory = () => {
     //===========================================================================================================================
     const siteSettings = useContext(SiteSettingsContext);
-    const { categories, loadingCategories, categoriesError } = useCategories();
-    const [displayCategories, setDisplayCategories] = useState<ICategory[]>([]);
+    const { categories, loadingCategories, categoriesError, loadCategories } = useCategories();
     const [demoCategoryModalIsVisible, setDemoCategoryModalIsVisible] = useState<boolean>(false);
     const navigate = useNavigate();
 
@@ -40,15 +38,14 @@ const ShopByCategory = () => {
     }
 
     //===========================================================================================================================
+    /** Load categories useEffect. */
     useEffect(() => {
-        //--Add 'All Flooring' category option.
-        setDisplayCategories([{
-            id: 0,
-            name: 'All Flooring',
-            imageUrl: 'categories/all_flooring.webp',
-            listPageUrl: 'product/all'
-        }, ...categories]);
-    }, [categories]);
+        const loader = async() => {
+            await loadCategories();
+        }
+
+        loader();
+    }, [loadCategories])
 
     //===========================================================================================================================
     return (
@@ -63,7 +60,7 @@ const ShopByCategory = () => {
                     <Container className="mt-2">
                         <Row className="position-relative">
                             {
-                                displayCategories.map((cat) => (
+                                categories.map((cat) => (
                                     <Col key={cat.id} xs={12} sm={6} md={4} lg={4} xl={3}>
                                         <Card data-bs-theme="light" 
                                             className="p-1 mb-2 shadow-sm"
@@ -76,10 +73,10 @@ const ShopByCategory = () => {
                                 ))
                             }
                             {
-                                loadingCategories ?? <BusyIndicator />
+                                loadingCategories && <BusyIndicator />
                             }
                             {
-                                categoriesError.hasError ?? <ErrorIndicator message={categoriesError.friendlyErrorMessage} />
+                                categoriesError.hasError && <ErrorIndicator message={categoriesError.friendlyErrorMessage} />
                             }
                         </Row>
                     </Container>
@@ -97,7 +94,7 @@ const ShopByCategory = () => {
                         <Accordion.Body>
                             <ListGroup>
                                 {
-                                    displayCategories.map((cat) => (
+                                    categories.map((cat) => (
                                         <ListGroup.Item key={cat.id} onClick={() => goToListPage(cat.listPageUrl)}>
                                             {cat.name}
                                         </ListGroup.Item>

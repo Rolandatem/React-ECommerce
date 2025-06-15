@@ -1,6 +1,6 @@
 import { useTrendingProducts } from "@/hooks/useTrendingProducts";
 import TrendingProductCard from "./TrendingProductCard";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import BusyIndicator from "@/pages/common/components/BusyIndicator";
 import ErrorIndicator from "@/pages/common/components/ErrorIndicator";
 import Container from 'react-bootstrap/Container';
@@ -17,7 +17,7 @@ const TrendingProducts: React.FC<IComponentClass> = (
     {className}: IComponentClass) => {
 
     //===========================================================================================================================
-    const { trendingProducts, loadingTrendingProducts, trendingProductsError } = useTrendingProducts();
+    const { trendingProducts, loadingTrendingProducts, trendingProductsError, loadTrendingProducts } = useTrendingProducts();
     const scrollerRef = useRef<HTMLElement | null>(null);
 
     //===========================================================================================================================
@@ -74,6 +74,15 @@ const TrendingProducts: React.FC<IComponentClass> = (
             });
         }
     }
+
+    //===========================================================================================================================
+    useEffect(() => {
+        const loader = async() => {
+            await loadTrendingProducts();
+        }
+
+        loader();
+    }, [loadTrendingProducts])
 
     //===========================================================================================================================
     return (

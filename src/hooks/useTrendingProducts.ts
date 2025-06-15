@@ -1,11 +1,12 @@
 import SiteSettingsContext from "@/tools/contexts/SiteSettingsContext";
 import ShipType from "@/tools/enums/ShipType";
-import APIError from "@/tools/exceptions/APIError";
+import asFriendlyError from "@/tools/functions/asFriendlyError";
 import queryString from "@/tools/functions/queryString";
 import type IError from "@/tools/interfaces/IError";
+import type IFriendlyError from "@/tools/interfaces/IFriendlyError";
+import type ITestOptions from "@/tools/interfaces/ITestOptions";
 import type ITrendingProduct from "@/tools/interfaces/ITrendingProduct";
-import type IUseTrendingProductExports from "@/tools/interfaces/IUseTrendingProductExports";
-import { useContext, useEffect, useState } from "react"
+import { useCallback, useContext, useState } from "react"
 
 /**
  * Iterates through the lsit of products and converts the integer value returned from
@@ -48,14 +49,13 @@ const emptyTrendingProduct: ITrendingProduct = {
 }
 
 //===========================================================================================================================
-/**
- * Hook used to retrieve trending product information from the API.
- * @param withDelay Optional parameter that allows testing with a 2 second latency. Default false.
- * @param withError Optional parameter that allows testing with an error returned from the API. Default false. 
- */
-const useTrendingProducts = ({
-        withDelay = false as boolean, 
-        withError = false as boolean} = {}): IUseTrendingProductExports => {
+const defaultErrorState: IFriendlyError = {hasError: false, friendlyErrorMessage: ''};
+
+//===========================================================================================================================
+/** Hook used to communicate with the TrendingOptions API endpoint. */
+const useTrendingProducts = (
+    /** Indicates which API test options to use. */
+    options: ITestOptions = {withDelay: false, withError: false}) => {
 
     //===========================================================================================================================
     const siteSettings = useContext(SiteSettingsContext);
@@ -65,43 +65,36 @@ const useTrendingProducts = ({
         {...emptyTrendingProduct, id: 3}]);
     const [loadingTrendingProducts, setLoadingTrendingProducts] = useState<boolean>(false);
     const [trendingProductsError, setTrendingProductsError] = useState<IError>({hasError: false})
+    const query = queryString(options);
 
     //===========================================================================================================================
-    useEffect(() => {
-        const query = queryString(withDelay, withError);
-        const fetchTrendingProducts = async() => {
-            setLoadingTrendingProducts(true);
-            try {
-                await fetch(`${siteSettings?.webAPIUrl}/trendingproducts?${query.toString()}`)
-                    .then(async response => {
-                        const json = await response.json();
-                        if (response.ok === false) {
-                            console.log('APIERROR: ', json);
-                            throw new APIError(json);
-                        }
+    /** Loads all trending produts. */
+    const loadTrendingProducts = useCallback(async() => {
+        setLoadingTrendingProducts(true);
+        setTrendingProductsError(defaultErrorState);
 
-                        return json;
-                    })
-                    .then(async json => setTrendingProducts(await swapShipType(json)));
-            } catch(error) {
-                if (error instanceof APIError === false) {
-                    console.log('Unhandled:', error);
-                }
+        try {
+            const endpoint = `${siteSettings?.webAPIUrl}/trendingproducts?${query.toString()}`;
+            const response = await fetch(endpoint);
+            
+            if (response.ok === false) { throw new Error('Failed to fetch Trending Products.'); }
 
-                setTrendingProductsError({
-                    hasError: true,
-                    friendlyErrorMessage: `Sorry, we're having trouble loading the Trending Products.`
-                })
-            } finally {
-                setLoadingTrendingProducts(false);
-            }
+            const data: ITrendingProduct[] = await response.json();
+            setTrendingProducts(await swapShipType(data));
+        } catch (error) {
+            setTrendingProductsError(asFriendlyError(error, `Sorry, we're having trouble loading the Trending Products.`));
+        } finally {
+            setLoadingTrendingProducts(false);
         }
-
-        fetchTrendingProducts();
-    }, [siteSettings?.webAPIUrl, withDelay, withError])
+    }, [query, siteSettings?.webAPIUrl])
 
     //===========================================================================================================================
-    return { trendingProducts, loadingTrendingProducts, trendingProductsError }
+    return { 
+        trendingProducts, 
+        loadingTrendingProducts, 
+        trendingProductsError,
+        loadTrendingProducts
+    }
 }
 
 export { useTrendingProducts, emptyTrendingProduct };

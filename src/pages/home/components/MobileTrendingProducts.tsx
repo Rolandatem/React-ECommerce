@@ -17,7 +17,7 @@ const MobileTrendingProducts: React.FC<IComponentClass> = (
     {className} : IComponentClass) => {
     
     //===========================================================================================================================
-    const { trendingProducts, loadingTrendingProducts, trendingProductsError} = useTrendingProducts();
+    const { trendingProducts, loadingTrendingProducts, trendingProductsError, loadTrendingProducts} = useTrendingProducts();
     const [currentProduct, setCurrentProduct] = useState<ITrendingProduct>(emptyTrendingProduct);
 
     //===========================================================================================================================
@@ -44,6 +44,15 @@ const MobileTrendingProducts: React.FC<IComponentClass> = (
     useEffect(() => {
         setCurrentProduct(trendingProducts[0]);
     }, [trendingProducts])
+
+    //===========================================================================================================================
+    useEffect(() => {
+        const loader = async() => {
+            await loadTrendingProducts();
+        }
+        
+        loader();
+    }, [loadTrendingProducts])
 
     //===========================================================================================================================
     return (
