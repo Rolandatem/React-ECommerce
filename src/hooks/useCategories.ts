@@ -41,7 +41,7 @@ const useCategories = ({
                 await fetch (`${siteSettings?.webAPIUrl}/category?${query.toString()}`)
                     .then(async response => {
                         const json = await response.json();
-                        if (response.ok == false) {
+                        if (response.ok === false) {
                             console.log('APIERROR: ', json);
                             throw new APIError(json);
                         }

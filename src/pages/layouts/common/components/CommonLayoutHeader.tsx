@@ -93,11 +93,8 @@ const CommonLayoutHeader = () => {
                                     }
                                 </NavDropdown>
                                 <NavDropdown title="Resources">
-                                    <NavDropdown.Item>
-                                        resource 1
-                                    </NavDropdown.Item>
-                                    <NavDropdown.Item>
-                                        resource 2
+                                    <NavDropdown.Item onClick={() => navigate('/faqs')}>
+                                        FAQ
                                     </NavDropdown.Item>
                                 </NavDropdown>
                                 <Nav.Link className='text-nowrap' onClick={() => navigateTo('/contactus')}>

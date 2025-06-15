@@ -8,6 +8,7 @@ import AboutUs from "./pages/aboutus/AboutUs";
 import ContactUs from "./pages/contactus/ContactUs";
 import type ISiteSettings from "./tools/interfaces/ISiteSettings";
 import SiteSettingsContext from "./tools/contexts/SiteSettingsContext";
+import FAQs from "./pages/faqs/FAQs";
 
 function App() {
   const siteSettings : ISiteSettings = {
@@ -25,6 +26,7 @@ function App() {
             <Route index element={<Home />} />
             <Route path='/aboutus' element={<AboutUs />} />
             <Route path='/contactus' element={<ContactUs />} />
+            <Route path='/faqs' element={<FAQs />} />
             <Route path="*" element={<NotFound404 />} />
           </Route>
         </Routes>
