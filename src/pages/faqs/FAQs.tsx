@@ -11,6 +11,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
+import FAQsList from "./components/FAQsList";
 
 //===========================================================================================================================
 /** Default setup for the modal alert. */
@@ -100,35 +101,7 @@ const FAQs = () => {
 
                 <Row className="mt-3">
                     <Col className="position-relative" style={{minHeight: '100px'}}>
-                        <Accordion>
-                            {
-                                faqs?.map((faq) => (
-                                    <Accordion.Item className="" key={faq.id} eventKey={faq.id.toString()}>
-                                        <Accordion.Header>{faq.question}</Accordion.Header>
-                                        <Accordion.Body>
-                                            <div>{faq.answer}</div>
-                                            <div className="mt-4 text-primary">
-                                                <span>Was this helpful?</span>
-
-                                                {/* THUMBS UP */}
-                                                <span role="button" 
-                                                    onClick={() => onVote(faq.id, "up")} 
-                                                    className={`pi pi-thumbs-up-fill ms-4 ${faqVotes[faq.id] ? 'text-secondary' : 'text-white'}`}
-                                                    style={{cursor: faqVotes[faq.id] ? "default" : "pointer", opacity: faqVotes[faq.id] ? 0.5 : 1 }}></span>
-                                                <span className="ms-2">{faq.upVotes}</span>
-
-                                                {/* THUMBS DOWN */}
-                                                <span role="button" 
-                                                    onClick={() => onVote(faq.id, "down")} 
-                                                    className={`pi pi-thumbs-down-fill ms-3 ${faqVotes[faq.id] ? 'text-secondary' : 'text-white'}`}
-                                                    style={{cursor: faqVotes[faq.id] ? "default" : "pointer", opacity: faqVotes[faq.id] ? 0.5 : 1 }}></span>
-                                                <span className="ms-2">{faq.downVotes}</span>
-                                            </div>
-                                        </Accordion.Body>
-                                    </Accordion.Item>
-                                ))
-                            }
-                        </Accordion>
+                        <FAQsList faqs={faqs} onVote={onVote} faqVotes={faqVotes} />
                         {
                             loadingFAQs && <BusyIndicator />
                         }

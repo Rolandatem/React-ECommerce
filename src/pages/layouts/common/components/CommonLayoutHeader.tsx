@@ -9,7 +9,6 @@ import Col from 'react-bootstrap/Col';
 import useCategories from '@/hooks/useCategories';
 import { useEffect, useState } from 'react';
 import ShopByCategoryDemoModal from '@/pages/common/components/ShopByCategoryDemoModal';
-import type ICategory from '@/tools/interfaces/ICategory';
 
 /**
  * Footer component used for the Common Layout component.
@@ -17,8 +16,7 @@ import type ICategory from '@/tools/interfaces/ICategory';
 const CommonLayoutHeader = () => {
     //===========================================================================================================================
     const navigate = useNavigate();
-    const { categories } = useCategories();
-    const [displayCategories, setDisplayCategories] = useState<ICategory[]>([]);
+    const { categories, loadCategories } = useCategories();
     const [demoCategoryModalIsVisible, setDemoCategoryModalIsVisible] = useState<boolean>(false);
     const [navBarIsExpanded, setNavBarIsExpanded] = useState<boolean>(false);
 
@@ -55,14 +53,12 @@ const CommonLayoutHeader = () => {
 
     //===========================================================================================================================
     useEffect(() => {
-        //--Add 'All Flooring' category option.
-        setDisplayCategories([{
-            id: 0,
-            name: 'All Flooring',
-            imageUrl: 'categories/all_flooring.webp',
-            listPageUrl: 'product/all'
-        }, ...categories]);
-    }, [categories])
+        const loader = async() => {
+            await loadCategories();
+        }
+
+        loader();
+    }, [loadCategories])
 
     //===========================================================================================================================
     return (
@@ -72,7 +68,7 @@ const CommonLayoutHeader = () => {
                     
                     {/* COMPANY BRAND */}
                     <Col xs={2} md={3} className={styles.leftSideHeader}>
-                        <div onClick={() => navigate('/')} role='button' className={styles.brand}>
+                        <div onClick={() => navigateTo('/')} role='button' className={styles.brand}>
                             <span className='pi pi-building-columns'></span>
                             <span className='ms-2 d-none d-lg-inline font-roboto'>Martinez Flooring</span>
                         </div>
@@ -85,7 +81,7 @@ const CommonLayoutHeader = () => {
                             <Nav>
                                 <NavDropdown title='Flooring by Category'>
                                     {
-                                        displayCategories.map((cat) => (
+                                        categories.map((cat) => (
                                             <NavDropdown.Item key={cat.id} onClick={() => goToListPage(cat.listPageUrl)} className='text-wrap'>
                                                 {cat.name}
                                             </NavDropdown.Item>
@@ -93,7 +89,7 @@ const CommonLayoutHeader = () => {
                                     }
                                 </NavDropdown>
                                 <NavDropdown title="Resources">
-                                    <NavDropdown.Item onClick={() => navigate('/faqs')}>
+                                    <NavDropdown.Item onClick={() => navigateTo('/faqs')}>
                                         FAQ
                                     </NavDropdown.Item>
                                 </NavDropdown>

@@ -1,4 +1,4 @@
-import type IRequiredFieldLabel from "@/tools/interfaces/IRequiredFieldLabel";
+import type IFieldLabel from "@/tools/interfaces/IFieldLabel";
 
 /**
  * Simple component used in the 'label' prop of things like the floating label.
@@ -6,7 +6,7 @@ import type IRequiredFieldLabel from "@/tools/interfaces/IRequiredFieldLabel";
  * label, but displays an asterisk with the 'text-danger' class and is
  * reusable.
  */
-const RequiredFieldLabel = (props: IRequiredFieldLabel) => {
+const RequiredFieldLabel = (props: IFieldLabel) => {
     return (
         <>
             <span>{props.label}</span>

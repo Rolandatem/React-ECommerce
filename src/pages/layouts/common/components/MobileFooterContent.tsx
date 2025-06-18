@@ -36,7 +36,7 @@ const MobileFooterContent: React.FC<IComponentClass> = (props) => {
                     <div>123 W. Center Parkway</div>
                     <div>Phoenix, AZ 85001</div>
                     <div>p.(800)555-1212</div>
-                    <div role="button" className="text-decoration-underline" onClick={() => navigate('/contactus')}>e.customerservice@martinezflooring.com</div>
+                    <div role="button" className="text-decoration-underline" onClick={() => navigate('/contactus')}>e: customerservice@martinezflooring.com</div>
                 </Accordion.Body>
             </Accordion.Item>
 

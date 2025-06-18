@@ -29,7 +29,7 @@ const NonMobileFooterContent: React.FC<IComponentClass> = (props) => {
                 <div className="text-muted">
                     <div>123 W. Center Parkway</div>
                     <div>Phoenix, AZ 85001</div>
-                    <div role="button" className="text-decoration-underline d-inline-grid" onClick={() => navigate('/contactus')}>e.customerservice@martinezflooring.com</div>
+                    <div role="button" className="text-decoration-underline d-inline-grid" onClick={() => navigate('/contactus')}>e: customerservice@martinezflooring.com</div>
                 </div>
             </Col>
         </Row>

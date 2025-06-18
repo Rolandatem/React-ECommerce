@@ -9,6 +9,8 @@ import ContactUs from "./pages/contactus/ContactUs";
 import type ISiteSettings from "./tools/interfaces/ISiteSettings";
 import SiteSettingsContext from "./tools/contexts/SiteSettingsContext";
 import FAQs from "./pages/faqs/FAQs";
+import AllFAQs from "./pages/faqs/AllFAQS";
+import { ToastProvider } from "./behaviors/toastification/ToastProvider";
 
 function App() {
   const siteSettings : ISiteSettings = {
@@ -20,17 +22,20 @@ function App() {
 
   return (
     <SiteSettingsContext.Provider value={siteSettings}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<CommonLayout />}>
-            <Route index element={<Home />} />
-            <Route path='/aboutus' element={<AboutUs />} />
-            <Route path='/contactus' element={<ContactUs />} />
-            <Route path='/faqs' element={<FAQs />} />
-            <Route path="*" element={<NotFound404 />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <ToastProvider isMobile={siteSettings.isMobile}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<CommonLayout />}>
+              <Route index element={<Home />} />
+              <Route path='/aboutus' element={<AboutUs />} />
+              <Route path='/contactus' element={<ContactUs />} />
+              <Route path='/faqs' element={<FAQs />} />
+              <Route path='/faqs/all' element={<AllFAQs />} />
+              <Route path="*" element={<NotFound404 />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </ToastProvider>
     </SiteSettingsContext.Provider>
   )
 }

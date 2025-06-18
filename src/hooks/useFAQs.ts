@@ -3,6 +3,7 @@ import asFriendlyError from "@/tools/functions/asFriendlyError";
 import queryString from "@/tools/functions/queryString";
 import type IFAQ from "@/tools/interfaces/IFAQ";
 import type IFriendlyError from "@/tools/interfaces/IFriendlyError";
+import type ISubmitQuestionForm from "@/tools/interfaces/ISubmitQuestionForm";
 import type ITestOptions from "@/tools/interfaces/ITestOptions";
 import { useCallback, useContext, useState } from "react";
 
@@ -92,6 +93,53 @@ const useFAQs = (
     }, [query, siteSettings?.webAPIUrl])
 
     //===========================================================================================================================
+    /** Searches FAQs */
+    const searchFAQs = useCallback(async(
+        /** User search query */
+        searchQuery: string) => {
+
+        setLoadingFAQs(true);
+        setFAQsError(defaultErrorState);
+        try {
+            query.append('query', searchQuery);
+            const endpoint = `${siteSettings?.webAPIUrl}/faqs/search?${query.toString()}`;
+            const response = await fetch(endpoint);
+            
+            if (response.ok === false) { throw new Error('Unable to search FAQs'); }
+
+            setFAQs(await response.json());
+            return defaultErrorState;
+        } catch (error) {
+            return asFriendlyError(error, `Sorry, we're having trouble searching the FAQs.`);
+        } finally {
+            setLoadingFAQs(false);
+        }
+    }, [query, siteSettings?.webAPIUrl])
+
+    //===========================================================================================================================
+    /** Posts a user submitted question for FAQ. */
+    const submitFAQ = useCallback(async(
+        /** User submitted question. */
+        userSubmission: ISubmitQuestionForm) => {
+
+        try {
+            const endpoint = `${siteSettings?.webAPIUrl}/faqs`;
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ question: userSubmission.question, email: userSubmission.email })
+            });
+
+            if (response.ok === false) { throw new Error('Unable to post question.'); }
+            return defaultErrorState;
+        } catch (error) {
+            return asFriendlyError(error, 'Sorry, but there was a problem submitting the FAQ question.');
+        }
+    }, [siteSettings?.webAPIUrl])
+
+    //===========================================================================================================================
     return {
         faqs,
         setFAQs,
@@ -99,7 +147,9 @@ const useFAQs = (
         faqsError,
         loadFAQs,
         getFAQById,
-        castFAQVote
+        castFAQVote,
+        searchFAQs,
+        submitFAQ
     }
 }
 
