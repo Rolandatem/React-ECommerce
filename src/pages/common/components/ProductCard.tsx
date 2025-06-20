@@ -1,27 +1,33 @@
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Image from 'react-bootstrap/Image';
-import styles from '../styles/trendingProducts.module.scss';
 import { useNavigate } from 'react-router-dom';
-import type ITrendingProductCard from '@/tools/interfaces/ITrendingProductCard';
 import currencyFormatter from '@/tools/functions/currencyFormatter';
+import styles from '../styles/productCard.module.scss';
+import type ShipType from '@/tools/enums/ShipType';
+import convertShipType from '@/tools/functions/convertShipType';
+import type IProductCard from '@/tools/interfaces/IProductCard';
 
 /**
- * Displays trending product info on a Card.
- * @param product ITrendingProduct to display.
+ * Displays product info on a Card.
+ * @param product IProduct to display.
  */
-const TrendingProductCard = ({product}: ITrendingProductCard) => {
+const ProductCard = ({product, className}: IProductCard) => {
     const navigate = useNavigate();
+    const shipType: ShipType = convertShipType(product.productTags
+        .find(pt => pt.tag.tagType.name === "Ship Type")?.tag.id ?? 1);
 
     //===========================================================================================================================
     return (
         <Card data-bs-theme="light" 
-              border="secondary" 
               role="button"
+              border="secondary"
               onClick={() => navigate(`/product/${product.sku}`)}
-              className={`p-1 shadow-sm ${styles.card}`}>
+              className={`p-1 shadow-sm ${styles.card} ${className}`}>
             <Card.Img src={product.imageUrl} className="border border-dark-subtle"></Card.Img>
-            <Card.Header style={{height: '60px'}}>{product.productName}</Card.Header>
+            <Card.Header className={styles.cardHeader}>
+                <Card.Title>{product.productName}</Card.Title>
+            </Card.Header>
             <ListGroup variant="flush">
                 <ListGroup.Item className="flex">
                     {
@@ -55,11 +61,11 @@ const TrendingProductCard = ({product}: ITrendingProductCard) => {
                     </div>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                    <Image src={product.shipType.ImageUrl} />
+                    <Image src={shipType.ImageUrl} />
                 </ListGroup.Item>
             </ListGroup>
         </Card>
     )
 }
 
-export default TrendingProductCard;
+export default ProductCard;

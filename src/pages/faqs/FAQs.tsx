@@ -5,7 +5,6 @@ import BusyIndicator from "../common/components/BusyIndicator";
 import ErrorIndicator from "../common/components/ErrorIndicator";
 import { useNavigate } from "react-router-dom";
 import type IBasicAlert from "@/tools/interfaces/IBasicAlert";
-import Accordion from 'react-bootstrap/Accordion';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';

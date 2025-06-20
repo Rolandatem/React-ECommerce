@@ -1,3 +1,4 @@
+import Error404 from "../exceptions/Error404";
 import type IFriendlyError from "../interfaces/IFriendlyError";
 
 /**
@@ -24,6 +25,13 @@ const asFriendlyError = (
     //--Example: Handle network errors.
     if (error instanceof TypeError && error.message === "Failed to fetch") {
         returnMessage.friendlyErrorMessage = "Network issue: Please check your internet connection.";
+        returnMessage.errorType = TypeError;
+        return returnMessage;
+    }
+
+    if (error instanceof Error404) {
+        returnMessage.friendlyErrorMessage = "Not Found.";
+        returnMessage.errorType = Error404;
         return returnMessage;
     }
 

@@ -1,31 +1,12 @@
 import SiteSettingsContext from "@/tools/contexts/SiteSettingsContext";
-import ShipType from "@/tools/enums/ShipType";
 import asFriendlyError from "@/tools/functions/asFriendlyError";
 import queryString from "@/tools/functions/queryString";
+import type IProduct from "@/tools/interfaces/dtos/IProduct";
 import type IError from "@/tools/interfaces/IError";
 import type IFriendlyError from "@/tools/interfaces/IFriendlyError";
 import type ITestOptions from "@/tools/interfaces/ITestOptions";
-import type ITrendingProduct from "@/tools/interfaces/ITrendingProduct";
 import { useCallback, useContext, useState } from "react"
 
-/**
- * Iterates through the lsit of products and converts the integer value returned from
- * the API to the local ShipType object. This is because there is no direct conversion
- * from C# enumeration to the local one.
- * NOTE: Disabling warning here because the types don't match but it is necessary
- * to not be type-strict here.
- * @param products List of ITrendingProduct to convert the shipType value for.
- * @returns List of ITrendingProduct's with the converted shipType value.
- */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const swapShipType = async(products: any[]): Promise<ITrendingProduct[]> => {
-    return products.map(product => {
-        return {
-            ...product,
-            shipType: ShipType.ConvertToShipType(product.shipType)
-        }
-    });
-}
 //===========================================================================================================================
 
 /**
@@ -33,7 +14,7 @@ const swapShipType = async(products: any[]): Promise<ITrendingProduct[]> => {
  * while the real data is being requested from the API. This makes the
  * page look cleaner instead of flickering.
  */
-const emptyTrendingProduct: ITrendingProduct = {
+const emptyTrendingProduct: IProduct = {
     id: 0,
     sku: '',
     productName: '',
@@ -45,7 +26,18 @@ const emptyTrendingProduct: ITrendingProduct = {
     salePrice: 0,
     originalPrice: 0,
     savingsPercentage: 0,
-    shipType: ShipType.None
+    categoryId: 0,
+    productTags: [{
+        id: 0,
+        tag: {
+            id: 1,
+            name: 'None',
+            tagType: {
+                id: 1,
+                name: 'ShipType'
+            }
+        }
+    }]
 }
 
 //===========================================================================================================================
@@ -59,10 +51,11 @@ const useTrendingProducts = (
 
     //===========================================================================================================================
     const siteSettings = useContext(SiteSettingsContext);
-    const [trendingProducts, setTrendingProducts] = useState<ITrendingProduct[]>([
-        {...emptyTrendingProduct, id: 1}, 
-        {...emptyTrendingProduct, id: 2},
-        {...emptyTrendingProduct, id: 3}]);
+    const [trendingProducts, setTrendingProducts] = useState<IProduct[]>([
+        { ...emptyTrendingProduct, id: 1 },
+        { ...emptyTrendingProduct, id: 2 },
+        { ...emptyTrendingProduct, id: 3 },
+    ]);
     const [loadingTrendingProducts, setLoadingTrendingProducts] = useState<boolean>(false);
     const [trendingProductsError, setTrendingProductsError] = useState<IError>({hasError: false})
     const query = queryString(options);
@@ -79,8 +72,8 @@ const useTrendingProducts = (
             
             if (response.ok === false) { throw new Error('Failed to fetch Trending Products.'); }
 
-            const data: ITrendingProduct[] = await response.json();
-            setTrendingProducts(await swapShipType(data));
+            const data: IProduct[] = await response.json();
+            setTrendingProducts(data);
         } catch (error) {
             setTrendingProductsError(asFriendlyError(error, `Sorry, we're having trouble loading the Trending Products.`));
         } finally {

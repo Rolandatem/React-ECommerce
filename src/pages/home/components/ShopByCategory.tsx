@@ -12,6 +12,7 @@ import Row from 'react-bootstrap/Row';
 import { useNavigate } from "react-router-dom";
 import ShopByCategoryDemoModal from "@/pages/common/components/ShopByCategoryDemoModal";
 import SiteSettingsContext from "@/tools/contexts/SiteSettingsContext";
+import styles from '../styles/shopByCategory.module.scss';
 
 /** Displays the Shop By Category section for the home page. */
 const ShopByCategory = () => {
@@ -29,7 +30,7 @@ const ShopByCategory = () => {
      * @param listPageUrl List page url to send the user to.
      */
     const goToListPage = (listPageUrl: string) => {
-        if (listPageUrl !== 'product/all') {
+        if (listPageUrl !== 'list/all') {
             setDemoCategoryModalIsVisible(true);
             return;
         }
@@ -63,7 +64,7 @@ const ShopByCategory = () => {
                                 categories.map((cat) => (
                                     <Col key={cat.id} xs={12} sm={6} md={4} lg={4} xl={3}>
                                         <Card data-bs-theme="light" 
-                                            className="p-1 mb-2 shadow-sm"
+                                            className={`p-1 mb-2 shadow-sm ${styles.card}`}
                                             role="button"
                                             onClick={() => goToListPage(cat.listPageUrl)}>
                                             <Card.Img src={cat.imageUrl} className="border border-dark-subtle"></Card.Img>

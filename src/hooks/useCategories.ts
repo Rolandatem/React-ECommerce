@@ -1,8 +1,8 @@
 import SiteSettingsContext from "@/tools/contexts/SiteSettingsContext";
+import Error404 from "@/tools/exceptions/Error404";
 import asFriendlyError from "@/tools/functions/asFriendlyError";
 import queryString from "@/tools/functions/queryString";
 import type ICategory from "@/tools/interfaces/ICategory";
-import type IError from "@/tools/interfaces/IError";
 import type IFriendlyError from "@/tools/interfaces/IFriendlyError";
 import type ITestOptions from "@/tools/interfaces/ITestOptions";
 import { useCallback, useContext, useState } from "react";
@@ -33,7 +33,7 @@ const useCategories = (
         {...emptyCategory, id: 2},
         {...emptyCategory, id: 3}]);
     const [loadingCategories, setLoadingCategories] = useState<boolean>(false);
-    const [categoriesError, setCategoriesError] = useState<IError>({hasError: false});
+    const [categoriesError, setCategoriesError] = useState<IFriendlyError>({hasError: false});
     const query = queryString(options);
 
     //===========================================================================================================================
@@ -55,7 +55,7 @@ const useCategories = (
                 id: 0,
                 name: 'All Flooring',
                 imageUrl: 'categories/all_flooring.webp',
-                listPageUrl: 'product/all'                    
+                listPageUrl: 'list/all'                    
             }, ...data];
 
             setCategories(data);
@@ -65,13 +65,35 @@ const useCategories = (
             setLoadingCategories(false);
         }
     }, [query, siteSettings?.webAPIUrl])
+
+    //===========================================================================================================================
+    /** Get's the category by the category id. */
+    const getCategoryById = useCallback(async(
+        /** DB ID of the category to get the name of. */
+        categoryId: number) => {
+        
+        try {
+            const endpoint = `${siteSettings?.webAPIUrl}/category/${categoryId}?${query.toString()}`;
+            const response = await fetch(endpoint);
+
+            if (response.status === 404) { throw new Error404(`Category for ID: ${categoryId} does not exist.`); }
+            if (response.ok === false) { throw new Error(`Failed to fetch the Category for ID: ${categoryId}`); }
+
+            const category: ICategory = await response.json();
+            return category;
+        } catch(error) {
+            setCategoriesError(asFriendlyError(error, `Sorry but we're unable to get the category.`));
+            return undefined;
+        }
+    }, [query, siteSettings?.webAPIUrl])
     
     //===========================================================================================================================
     return { 
         categories, 
         loadingCategories, 
         categoriesError,
-        loadCategories
+        loadCategories,
+        getCategoryById
     }
 }
 

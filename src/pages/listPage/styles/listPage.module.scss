@@ -1,0 +1,8 @@
+@import '@/assets/globals.scss';
+
+@include media-breakpoint-up(md) {
+    .listPageCard {
+        //width: 100% !important;
+        max-width: initial;
+    }
+}

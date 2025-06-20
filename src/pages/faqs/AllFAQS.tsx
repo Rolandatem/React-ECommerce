@@ -1,4 +1,3 @@
-import { Button, Col, Container, FloatingLabel, Form, FormControl, InputGroup, Modal, Pagination, Row } from "react-bootstrap";
 import SectionLabel from "../common/components/SectionLabel";
 import useFAQs from "@/hooks/useFAQs";
 import { useCallback, useEffect, useState } from "react";
@@ -10,6 +9,16 @@ import type ISubmitQuestionForm from "@/tools/interfaces/ISubmitQuestionForm";
 import RequiredFieldLabel from "../common/components/RequiredFieldLabel";
 import onCommonHandleChange from "@/tools/functions/onHandleChange";
 import { toast } from "@/behaviors/toastification/contexts";
+import Button from 'react-bootstrap/Button';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import Form from 'react-bootstrap/Form';
+import FormControl from 'react-bootstrap/FormControl';
+import InputGroup from 'react-bootstrap/InputGroup';
+import Modal from 'react-bootstrap/Modal';
+import Pagination from 'react-bootstrap/Pagination';
 
 //===========================================================================================================================
 /** Number of FAQ's to display per page. */

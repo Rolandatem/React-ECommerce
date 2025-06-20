@@ -28,7 +28,7 @@ const CommonLayoutHeader = () => {
      * @param listPageUrl List page url to send the user to.
      */
     const goToListPage = (listPageUrl: string) => {
-        if (listPageUrl !== 'product/all') {
+        if (listPageUrl !== 'list/all') {
             setDemoCategoryModalIsVisible(true);
             return;
         }

@@ -1,5 +1,4 @@
 import { useTrendingProducts } from "@/hooks/useTrendingProducts";
-import TrendingProductCard from "./TrendingProductCard";
 import { useEffect, useRef } from "react";
 import BusyIndicator from "@/pages/common/components/BusyIndicator";
 import ErrorIndicator from "@/pages/common/components/ErrorIndicator";
@@ -8,7 +7,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import SectionLabel from "@/pages/common/components/SectionLabel";
 import type IComponentClass from "@/tools/interfaces/IComponentClass";
-import type ITrendingProduct from "@/tools/interfaces/ITrendingProduct";
+import type IProduct from "@/tools/interfaces/dtos/IProduct";
+import ProductCard from "../../common/components/ProductCard";
 
 /**
  * Trending Product Information.
@@ -94,8 +94,8 @@ const TrendingProducts: React.FC<IComponentClass> = (
 
                     <Col ref={scrollerRef} className="px-0 pb-1 d-flex overflow-hidden position-relative">
                         {
-                            trendingProducts.map((product: ITrendingProduct) => (
-                                <TrendingProductCard key={product.id} product={product} />
+                            trendingProducts.map((product: IProduct) => (
+                                <ProductCard key={product.id} product={product} />
                             ))
                         }
 

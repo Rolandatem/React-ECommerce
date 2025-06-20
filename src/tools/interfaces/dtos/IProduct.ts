@@ -1,7 +1,7 @@
-import type ShipType from "../enums/ShipType";
+import type IProductTag from "./IProductTag"
 
-/** DTO object containing product information relative to trending products information. */
-export default interface ITrendingProduct {
+/** Defines the structure of a Product. */
+export default interface IProduct {
     /** DB ID */
     id: number,
     //** Product SKU */
@@ -24,6 +24,8 @@ export default interface ITrendingProduct {
     originalPrice: number,
     /** Whole number representing the savings. */
     savingsPercentage: number,
-    /** Shipping type */
-    shipType: ShipType
+    /** ID of the product category that this belongs to. */
+    categoryId: number
+    /** Product Tags. */
+    productTags: IProductTag[]
 }

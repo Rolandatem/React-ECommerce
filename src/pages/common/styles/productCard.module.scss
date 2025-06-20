@@ -2,12 +2,20 @@
 
 .card {
     width: 100%;
+
+    &:hover {
+        background-color: $highlight-blue;
+    }
 }
+.cardHeader {
+    height: 60px;
+}
+
 @include media-breakpoint-up(md) {
     .card {
         margin-right: $spacer * .5; //-- .me-2 in Bootstrap scale.
         flex-shrink: 0;
-        width: 350px;
+        max-width: 350px;
     }
 }
 

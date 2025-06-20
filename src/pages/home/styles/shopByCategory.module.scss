@@ -1,0 +1,7 @@
+@import '@/assets/globals.scss';
+
+.card {
+    &:hover {
+        background-color: $highlight-blue;
+    }
+}

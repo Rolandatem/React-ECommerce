@@ -22,17 +22,17 @@ export default class ShipType {
 
     //--Static ENUM-ish
     /** Normal shipping. */
-    public static readonly None = new ShipType(1, 'shipping/none.webp');
+    public static readonly None = new ShipType(1, '/shipping/none.webp');
     /** Quick shipping. */
-    public static readonly QuickShip = new ShipType(2, 'shipping/quick_ship.webp');
+    public static readonly QuickShip = new ShipType(2, '/shipping/quick_ship.webp');
     /** Free quick shipping. */
-    public static readonly FreeQuickShip = new ShipType(3, 'shipping/free_quick_shipping.webp');
+    public static readonly FreeQuickShip = new ShipType(3, '/shipping/free_quick_shipping.webp');
     /** Next day shipping. */
-    public static readonly NextDay = new ShipType(4, 'shipping/next_day_shipping.webp');
+    public static readonly NextDay = new ShipType(4, '/shipping/next_day_shipping.webp');
     /** Free next day shipping. */
-    public static readonly FreeNextDay = new ShipType(5, 'shipping/free_next_day_shipping.webp');
+    public static readonly FreeNextDay = new ShipType(5, '/shipping/free_next_day_shipping.webp');
     /** Free shipping. */
-    public static readonly FreeShipping = new ShipType(6, 'shipping/free_shipping.webp');
+    public static readonly FreeShipping = new ShipType(6, '/shipping/free_shipping.webp');
 
     //--Converters
     /**
