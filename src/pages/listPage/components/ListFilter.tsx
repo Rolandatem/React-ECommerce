@@ -1,12 +1,22 @@
 import type IFilterGroup from "@/tools/interfaces/IFilterGroup";
 import type IListFilterProps from "@/tools/interfaces/IListFilterProps";
-import { Card, Col, Form, Row } from "react-bootstrap";
+import { useState } from "react";
+import styles from '../styles/listFilter.module.scss';
+import Card from 'react-bootstrap/Card';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+import Accordion from 'react-bootstrap/Accordion';
 
 /**
  * List Page filter component. Will dynamically build a list of filters based on the
  * products that exist. Constructed using the site filter tag types in the database.
  * Displays all products that fix -any- of the checkboxes, and only those that match
  * the selected radio button groups.
+ * 
+ * - Groups with >10 options are shown inside a collapsible Accordion panel for better usability.
+ * - Radio groups have a "None" option at top for clearing the selection (unselect radio).
+ * 
  * @param IListFilterProps
  */
 const ListFilter = ({
@@ -16,7 +26,10 @@ const ListFilter = ({
     onChange}: IListFilterProps) => {
 
     //===========================================================================================================================
-    /** Builds available options for each filter group (tag type) */
+    /** 
+     * Builds available options for each filter group (tag type) 
+     * Each group contains options extracted from the products' productTags for that group.
+     */
     const filterGroups: IFilterGroup[] = siteFilterTagTypes.map(siteType => {
         const tagTypeId = siteType.tagTypeId;
         const foundTags: {[tagId: number]: string} = {};
@@ -48,7 +61,7 @@ const ListFilter = ({
     const onCheckboxChange = (
         tagTypeId: number, 
         optionId: number) => {
-        
+
         const prev = selectedFilters[tagTypeId] || [];
         let newVals: number[];
         if (prev.includes(optionId)) {
@@ -60,108 +73,184 @@ const ListFilter = ({
     }
 
     //===========================================================================================================================
-    /** Handles a radio button filter change event. */
-    const onRadioChange = (tagTypeId: number, optionId: number) => {
-        onChange({...selectedFilters, [tagTypeId]: [optionId]});
+    /**
+     * Handles a radio button filter change event.
+     * Enhancement: supports "clear" option (optionId null) to reset/unselect the group.
+     */
+    const onRadioChange = (tagTypeId: number, optionId: number | null) => {
+        if (optionId == null) {
+            // Select "None": Clear the radio selection
+            onChange({ ...selectedFilters, [tagTypeId]: [] });
+        } else {
+            // Select an option
+            onChange({ ...selectedFilters, [tagTypeId]: [optionId] });
+        }
     }
 
     //===========================================================================================================================
+    /**
+     * Accordion state for groups with >10 options
+     * Allows tracking which filter groups are open/closed in the UI.
+     */
+    const [openAccordions, setOpenAccordions] = useState<Record<number, boolean>>({});
+    const toggleAccordion = (id: number) => {
+        setOpenAccordions(prev => ({
+            ...prev,
+            [id]: !prev[id]
+        }));
+    };
+
+    //===========================================================================================================================
     return (
-        <Card
-            className="shadow"
-            style={{
-                background: "linear-gradient(135deg, #212C3B 90%, #27334A 100%)",
-                border: "1px solid #168aad",
-                borderRadius: 16,
-                boxShadow: "0 6px 24px 0 rgba(20,20,40,0.14)"
-            }}
-        >
-            <Card.Body style={{padding: "1rem 1rem 0.25rem 1rem"}}>
-                <h6 className="fw-bold mb-3" style={{
-                    color: "#74D3EA",
-                    letterSpacing: 2,
-                    textShadow: "0 1px 8px rgba(116,211,234,0.21)"
-                }}>
-                    <i className="pi pi-filter me-1" style={{fontSize: "1.05em", verticalAlign: "middle", color: "#74D3EA"}} />
+        <Card className={`shadow ${styles.mainFilterCard}`}>
+            <Card.Body className={styles.mainFilterCardBody}>
+                <h6 className="fw-bold mb-3">
+                    <i className="pi pi-filter me-1" />
                     Filters
                 </h6>
-                {filterGroups.map((group) => (
-                    <Card
-                        key={group.id}
-                        className="mb-3 border-0"
-                        style={{
-                            background: "rgba(32,42,58,0.96)",
-                            borderRadius: 12,
-                            boxShadow: "0 2px 8px 0 rgba(20,20,40,0.16)",
-                            border: "1px solid #27496d"
-                        }}
-                    >
-                        <Card.Body className="p-2">
-                            <Row className="align-items-center mb-1">
-                                <Col xs="auto">
-                                    <i className="pi pi-sliders-h" style={{ fontSize: "0.95em", color: "#b1e6fc" }} />
-                                </Col>
-                                <Col className="small fw-semibold" style={{
-                                    fontSize: "0.98em",
-                                    color: "#FFF"
-                                }}>
-                                    {group.name}
-                                </Col>
-                            </Row>
-                            <hr className="my-2" style={{ borderTop: "1px solid #395776", opacity: 0.37 }} />
-                            <Form>
-                                {group.options.length === 0 &&
-                                    <span className="text-muted small">No options for this filter.</span>
-                                }
-                                {group.filterType === "checkbox" &&
-                                    group.options.map(option => (
-                                        <Form.Check
-                                            key={option.id}
-                                            type="switch"
-                                            id={`filter-switch-${group.id}-${option.id}`}
-                                            label={
-                                                <span className="small" style={{ color: "#a2eafc" }}>
-                                                    <i className="pi pi-check-circle text-info me-1" />
-                                                    {option.name}
-                                                </span>
-                                            }
-                                            checked={(selectedFilters[group.id] || []).includes(option.id)}
-                                            onChange={() => onCheckboxChange(group.id, option.id)}
-                                            className="mb-2"
-                                            style={{
-                                                fontSize: "0.96em",
-                                                color: "#e1ecf7"
-                                            }}
-                                        />
-                                    ))
-                                }
-                                {group.filterType === "radio" &&
-                                    group.options.map(option => (
-                                        <Form.Check
-                                            key={option.id}
-                                            type="radio"
-                                            name={`filter-radio-group-${group.id}`}
-                                            id={`filter-radio-${group.id}-${option.id}`}
-                                            label={
-                                                <span className="small" style={{ color: "#b6b4ff" }}>
-                                                    <i className="pi pi-dot-circle text-primary me-1" />
-                                                    {option.name}
-                                                </span>
-                                            }
-                                            checked={(selectedFilters[group.id] || [])[0] === option.id}
-                                            onChange={() => onRadioChange(group.id, option.id)}
-                                            className="mb-2"
-                                            style={{
-                                                fontSize: "0.96em",
-                                                color: "#dde1ef"
-                                            }}
-                                        />
-                                    ))
-                                }
-                            </Form>
-                        </Card.Body>
-                    </Card>
-                ))}
+                {
+                    filterGroups
+                        .filter(group => group.options.length > 0)
+                        .map((group) => (
+                            <Card key={group.id} className={`mb-3 border-0 ${styles.filterGroupCard}`}>
+                                <Card.Body className="p-0">
+                                    <Row className="align-items-center mb-1">
+                                        <Col xs="auto">
+                                            <i className={`pi pi-sliders-h ${styles.slider}`} />
+                                        </Col>
+                                        <Col className={`small fw-semibold ${styles.sliderText}`}>
+                                            {group.name}
+                                        </Col>
+                                    </Row>
+                                    <hr className="my-2" />
+                                    {
+                                        group.options.length > 10 
+                                        ? (
+                                            <Accordion activeKey={openAccordions[group.id] ? "0" : undefined}>
+                                                <Accordion.Item eventKey="0">
+                                                    <Accordion.Header onClick={() => toggleAccordion(group.id)}>
+                                                        {
+                                                            group.filterType === "checkbox"
+                                                                ? `${group.options.length} options`
+                                                                : `${group.options.length} choices`
+                                                        }
+                                                    </Accordion.Header>
+                                                    <Accordion.Body>
+                                                        <Form>
+                                                            {
+                                                                group.filterType === "checkbox" && group.options.map(option => (
+                                                                    <Form.Check key={option.id} 
+                                                                                type="switch" 
+                                                                                id={`filter-switch-${group.id}-${option.id}`} 
+                                                                                label={
+                                                                                    <span className="small" style={{ color: "#a2eafc" }}>
+                                                                                        <i className="pi pi-check-circle text-info me-1" />
+                                                                                        {option.name}
+                                                                                    </span>
+                                                                                }
+                                                                                checked={(selectedFilters[group.id] || []).includes(option.id)}
+                                                                                onChange={() => onCheckboxChange(group.id, option.id)}
+                                                                                className={`mb-2 ${styles.filterCheckboxOptionLabel}`} />
+                                                                ))
+                                                            }
+                                                            {
+                                                                group.filterType === "radio" &&
+                                                                <>
+                                                                    <Form.Check type="radio"
+                                                                                name={`filter-radio-group-${group.id}`}
+                                                                                id={`filter-radio-${group.id}-clear`}
+                                                                                label={
+                                                                                    <span className="small" style={{ color: "#b6b4ff" }}>
+                                                                                        <i className="pi pi-ban text-secondary me-1" />
+                                                                                        <span style={{ fontStyle: "italic" }}>None</span>
+                                                                                    </span>
+                                                                                }
+                                                                                checked={!((selectedFilters[group.id] || [])[0])}
+                                                                                onChange={() => onRadioChange(group.id, null)}
+                                                                                className={`mb-2 ${styles.filterRadioOptionLabel}`} />
+                                                                    {
+                                                                        group.options.map(option => (
+                                                                            <Form.Check key={option.id}
+                                                                                        type="radio"
+                                                                                        name={`filter-radio-group-${group.id}`}
+                                                                                        id={`filter-radio-${group.id}-${option.id}`}
+                                                                                        label={
+                                                                                            <span className="small" style={{ color: "#b6b4ff" }}>
+                                                                                                <i className="pi pi-dot-circle text-primary me-1" />
+                                                                                                {option.name}
+                                                                                            </span>
+                                                                                        }
+                                                                                        checked={(selectedFilters[group.id] || [])[0] === option.id}
+                                                                                        onChange={() => onRadioChange(group.id, option.id)}
+                                                                                        className={`mb-2 ${styles.filterRadioOptionLabel}`} />
+                                                                        ))
+                                                                    }
+                                                                </>
+                                                            }
+                                                        </Form>
+                                                    </Accordion.Body>
+                                                </Accordion.Item>
+                                            </Accordion>
+                                        ) : (
+                                            <Form>
+                                                {
+                                                    group.filterType === "checkbox" &&
+                                                    group.options.map(option => (
+                                                        <Form.Check key={option.id}
+                                                                    type="switch"
+                                                                    id={`filter-switch-${group.id}-${option.id}`}
+                                                                    label={
+                                                                        <span className="small" style={{ color: "#a2eafc" }}>
+                                                                            <i className="pi pi-check-circle text-info me-1" />
+                                                                            {option.name}
+                                                                        </span>
+                                                                    }
+                                                                    checked={(selectedFilters[group.id] || []).includes(option.id)}
+                                                                    onChange={() => onCheckboxChange(group.id, option.id)}
+                                                                    className={`mb-2 ${styles.filterCheckboxOptionLabel}`} />
+                                                    ))
+                                                }
+                                                {
+                                                    group.filterType === "radio" &&
+                                                    <>
+                                                        <Form.Check type="radio"
+                                                                    name={`filter-radio-group-${group.id}`}
+                                                                    id={`filter-radio-${group.id}-clear`}
+                                                                    label={
+                                                                        <span className="small" style={{ color: "#b6b4ff" }}>
+                                                                            <i className="pi pi-ban text-secondary me-1" />
+                                                                            <span style={{ fontStyle: "italic" }}>None</span>
+                                                                        </span>
+                                                                    }
+                                                                    checked={!((selectedFilters[group.id] || [])[0])}
+                                                                    onChange={() => onRadioChange(group.id, null)}
+                                                                    className={`mb-2 ${styles.filterRadioOptionLabel}`} />
+                                                        {
+                                                            group.options.map(option => (
+                                                                <Form.Check key={option.id}
+                                                                    type="radio"
+                                                                    name={`filter-radio-group-${group.id}`}
+                                                                    id={`filter-radio-${group.id}-${option.id}`}
+                                                                    label={
+                                                                        <span className="small" style={{ color: "#b6b4ff" }}>
+                                                                            <i className="pi pi-dot-circle text-primary me-1" />
+                                                                            {option.name}
+                                                                        </span>
+                                                                    }
+                                                                    checked={(selectedFilters[group.id] || [])[0] === option.id}
+                                                                    onChange={() => onRadioChange(group.id, option.id)}
+                                                                    className={`mb-2 ${styles.filterRadioOptionLabel}`} />
+                                                            ))
+                                                        }
+                                                    </>
+                                                }
+                                            </Form>
+                                        )
+                                    }
+                                </Card.Body>
+                            </Card>
+                        ))
+                }
             </Card.Body>
         </Card>
     );

@@ -8,7 +8,6 @@ import Badge from 'react-bootstrap/Badge';
 import Col from 'react-bootstrap/Col';
 import useCategories from '@/hooks/useCategories';
 import { useEffect, useState } from 'react';
-import ShopByCategoryDemoModal from '@/pages/common/components/ShopByCategoryDemoModal';
 
 /**
  * Footer component used for the Common Layout component.
@@ -17,25 +16,9 @@ const CommonLayoutHeader = () => {
     //===========================================================================================================================
     const navigate = useNavigate();
     const { categories, loadCategories } = useCategories();
-    const [demoCategoryModalIsVisible, setDemoCategoryModalIsVisible] = useState<boolean>(false);
     const [navBarIsExpanded, setNavBarIsExpanded] = useState<boolean>(false);
 
     //===========================================================================================================================
-    /**
-     * Checks the list page url passed in, for demo purposes only the
-     * 'product/all' list page url is accepted, otherwise a modal
-     * explaining this to the user is displayed.
-     * @param listPageUrl List page url to send the user to.
-     */
-    const goToListPage = (listPageUrl: string) => {
-        if (listPageUrl !== 'list/all') {
-            setDemoCategoryModalIsVisible(true);
-            return;
-        }
-
-        navigateTo(listPageUrl);
-    }
-
     /**
      * Navigates the user to the specified url and closes the hamburger
      * menu when in mobile mode so it doesn't look goofy.
@@ -46,6 +29,7 @@ const CommonLayoutHeader = () => {
         setNavBarIsExpanded(false);
     }
 
+    //===========================================================================================================================
     /** Because of the above function we need to handle the toggle event now. */
     const onNavbarToggle = () => {
         setNavBarIsExpanded(!navBarIsExpanded);
@@ -82,7 +66,7 @@ const CommonLayoutHeader = () => {
                                 <NavDropdown title='Flooring by Category'>
                                     {
                                         categories.map((cat) => (
-                                            <NavDropdown.Item key={cat.id} onClick={() => goToListPage(cat.listPageUrl)} className='text-wrap'>
+                                            <NavDropdown.Item key={cat.id} onClick={() => navigateTo(`/list/${cat.id === 0 ? 'all' : cat.id}`)} className='text-wrap'>
                                                 {cat.name}
                                             </NavDropdown.Item>
                                         ))
@@ -110,8 +94,6 @@ const CommonLayoutHeader = () => {
 
                 </Container>
             </Navbar>
-
-            <ShopByCategoryDemoModal isVisible={demoCategoryModalIsVisible} setIsVisible={setDemoCategoryModalIsVisible} />
         </>
     )
 }

@@ -1,0 +1,59 @@
+@import '@/assets/globals.scss';
+
+$light-blue: #74D3EA;
+$common-shadow: 0 6px 24px 0 rgba(20,20,40,.16);
+
+.mainFilterCard {
+    background: linear-gradient(135deg, #212C3B 90%, #27334A 100%);
+    border: solid 1px #168AAD;
+    border-radius: 16px;
+    box-shadow: $common-shadow;
+}
+
+.mainFilterCardBody {
+    padding: 1rem 1rem 0.25rem 1rem;
+
+    &>h6 {
+        color: $light-blue;
+        letter-spacing: 2px;
+        text-shadow: 0 1px 8px rgba(116,211,234,.21);
+
+        &>i {
+            font-size: 1.05em;
+            vertical-align: middle;
+            color: $light-blue;
+        }
+    }
+}
+
+.filterGroupCard {
+    background: rgba(32,42,58,.96);
+    border-radius: 12px;
+    box-shadow: $common-shadow;
+    border: solid 1px #27496D;
+
+    .slider {
+        font-size: .95em;
+        color: #B1E6FC;
+    }
+
+    .sliderText {
+        font-size: .98em;
+        color: #FFFFFF;
+    }
+
+    hr {
+        border-top: solid 1px #395776;
+        opacity: .37;
+    }
+}
+
+.filterCheckboxOptionLabel {
+    font-size: .96em;
+    color: #E1ECF7;
+}
+
+.filterRadioOptionLabel {
+    font-size: .96em;
+    color: #DDE1EF;
+}

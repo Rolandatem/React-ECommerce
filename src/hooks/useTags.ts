@@ -19,6 +19,7 @@ const useTags = (
     const [siteFilterTagTypesError, setSiteFilterTagTypesError] = useState<IFriendlyError>({hasError: false});
 
     //===========================================================================================================================
+    /** Loads all site filter tag types. */
     const loadSiteFilterTagTypes = useCallback(async() => {
         setLoadingSiteFilterTagTypes(true);
         setSiteFilterTagTypesError({hasError: false});
@@ -38,6 +39,7 @@ const useTags = (
         }
     }, [query, siteSettings?.webAPIUrl])
 
+    //===========================================================================================================================
     return {
         siteFilterTagTypes,
         loadingSiteFilterTagTypes,

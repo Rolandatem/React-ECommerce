@@ -14,8 +14,7 @@ import { useCallback, useContext, useState } from "react";
 const emptyCategory : ICategory = {
     id: 0,
     name: '',
-    imageUrl: 'categories/empty.webp',
-    listPageUrl: ''
+    imageUrl: 'categories/empty.webp'
 }
 //===========================================================================================================================
 const defaultErrorState: IFriendlyError = {hasError: false, friendlyErrorMessage: ''};
@@ -55,7 +54,6 @@ const useCategories = (
                 id: 0,
                 name: 'All Flooring',
                 imageUrl: 'categories/all_flooring.webp',
-                listPageUrl: 'list/all'                    
             }, ...data];
 
             setCategories(data);

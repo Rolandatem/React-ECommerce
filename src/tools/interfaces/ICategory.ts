@@ -5,7 +5,5 @@ export default interface ICategory {
     /** Category Name */
     name: string,
     /** Category Image Url */
-    imageUrl: string,
-    /** Url to the category list page */
-    listPageUrl: string
+    imageUrl: string
 }

@@ -8,6 +8,7 @@ import NotFound404 from "../NotFound404";
 import Error404 from "@/tools/exceptions/Error404";
 import ErrorIndicator from "../common/components/ErrorIndicator";
 import useTags from "@/hooks/useTags";
+import MobileListPageContents from "./components/MobileListPageContents";
 
 /** List Page component. */
 const ListPage = () => {
@@ -57,7 +58,7 @@ const ListPage = () => {
                             <SectionLabel label={categoryName} className="mb-3" />
                             {
                                 siteSettings?.isMobile
-                                    ? (<span>Mobile</span>)
+                                    ? <MobileListPageContents siteFilterTagTypes={siteFilterTagTypes} />
                                     : <ListPageContents siteFilterTagTypes={siteFilterTagTypes} />
                             }
                         </>
