@@ -8,11 +8,12 @@ import Badge from 'react-bootstrap/Badge';
 import Col from 'react-bootstrap/Col';
 import useCategories from '@/hooks/useCategories';
 import { useEffect, useState } from 'react';
+import type ICommonLayoutHeaderProps from '@/tools/interfaces/ICommonLayoutHeaderProps';
 
 /**
  * Footer component used for the Common Layout component.
  */
-const CommonLayoutHeader = () => {
+const CommonLayoutHeader = ({cartQuantity}: ICommonLayoutHeaderProps) => {
     //===========================================================================================================================
     const navigate = useNavigate();
     const { categories, loadCategories } = useCategories();
@@ -88,7 +89,7 @@ const CommonLayoutHeader = () => {
                     <Col xs={2} md={3} className={styles.rightSideHeader}>
                         <div role='button' className='d-inline'>
                             <span className={`pi pi-shopping-cart ${styles.cart}`}></span>
-                            <Badge pill>9</Badge>
+                            <Badge pill>{cartQuantity}</Badge>
                         </div>
                     </Col>
 

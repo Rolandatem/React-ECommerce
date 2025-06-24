@@ -22,7 +22,7 @@ const variantToHeader: Record<string, string> = {
  * @param IToastContainerProps
  */
 const Toaster = ({toasts, position}: IToastContainerProps) => (
-    <ToastContainer position={position} style={{paddingTop: '60px', zIndex: 9999}}>
+    <ToastContainer position={position} className="position-fixed" style={{paddingTop: '60px', zIndex: 9999}}>
         {
             toasts.map(({id, message, header, variant}) => (
                 <Toast key={id} bg={variant} animation>

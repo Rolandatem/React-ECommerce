@@ -1,0 +1,19 @@
+import type ITag from "./ITag";
+
+/** Describes the structure of the Shopping Cart Line Item DTO */
+export default interface IShoppingCartLineItem {
+    /** DB ID */
+    id: number,
+    /** Quantity */
+    quantity: number,
+    /** Sale Price when added to cart/at sale */
+    salePriceAtSale: number,
+    /** Original Price when added to cart/at sale */
+    originalPriceAtSale: number,
+    /** Total Sale price when added to cart/at sale */
+    totalSalePrice: number,
+    /** Total Original Price when added to cart/at sale */
+    totalOriginalSalePrice: number,
+    /** Color Tag for item. */
+    tag: ITag
+}

@@ -12,6 +12,7 @@ import FAQs from "./pages/faqs/FAQs";
 import AllFAQs from "./pages/faqs/AllFAQS";
 import { ToastProvider } from "./behaviors/toastification/ToastProvider";
 import ListPage from "./pages/listPage/ListPage";
+import ProductPage from "./pages/productPage/ProductPage";
 
 function App() {
   const siteSettings : ISiteSettings = {
@@ -33,6 +34,7 @@ function App() {
               <Route path='/faqs' element={<FAQs />} />
               <Route path='/faqs/all' element={<AllFAQs />} />
               <Route path='/list/:option?' element={<ListPage />} />
+              <Route path='/product/:sku?' element={<ProductPage />} />
               <Route path="*" element={<NotFound404 />} />
             </Route>
           </Routes>

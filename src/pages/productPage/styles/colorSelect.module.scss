@@ -1,0 +1,13 @@
+@import '@/assets/globals.scss';
+
+.swatchImage {
+    @extend .border;
+    @extend .border-2;
+    border-color: transparent !important;
+}
+
+.swatchImageSelected {
+    @extend .border;
+    @extend .border-2;
+    border-color: $secondary !important;
+}

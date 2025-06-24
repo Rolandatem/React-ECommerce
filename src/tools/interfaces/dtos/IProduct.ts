@@ -1,3 +1,5 @@
+import type IProductHighlight from "./IProductHighlight"
+import type IProductImage from "./IProductImage"
 import type IProductTag from "./IProductTag"
 
 /** Defines the structure of a Product. */
@@ -28,4 +30,8 @@ export default interface IProduct {
     categoryId: number
     /** Product Tags. */
     productTags: IProductTag[]
+    /** Product Highlights */
+    productHighlights: IProductHighlight[]
+    /** Product Images */
+    productImages: IProductImage[]
 }
