@@ -25,7 +25,7 @@ const CommonLayoutHeader = ({cartQuantity}: ICommonLayoutHeaderProps) => {
     const navigate = useNavigate();
     const { categories, loadCategories } = useCategories();
     const [navBarIsExpanded, setNavBarIsExpanded] = useState<boolean>(false);
-    const [showShoppingCart, setShowShoppingCart] = useState<boolean>(true);
+    const [showShoppingCart, setShowShoppingCart] = useState<boolean>(false);
     const [cartTotal, setCartTotal] = useState<ICartTotals>({cost: 0, savings: 0, subTotal: 0, taxes: 0, cartTotal: 0});
     const {cart, getShoppingCart, removeLineItem} = useShoppingCart();
     const [isBusy, setIsBusy] = useState<{[lineItemId: number]: boolean}>({});
