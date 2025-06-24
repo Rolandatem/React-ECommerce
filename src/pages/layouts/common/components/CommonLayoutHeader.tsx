@@ -1,21 +1,24 @@
 import styles from '../styles/commonLayoutHeader.module.scss';
 import { useNavigate } from 'react-router-dom';
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import Container from 'react-bootstrap/Container';
-import Badge from 'react-bootstrap/Badge';
-import Col from 'react-bootstrap/Col';
 import useCategories from '@/hooks/useCategories';
 import React, { useContext, useEffect, useState } from 'react';
 import type ICommonLayoutHeaderProps from '@/tools/interfaces/ICommonLayoutHeaderProps';
-import { Button, Image, Offcanvas, Row } from 'react-bootstrap';
 import useShoppingCart from '@/hooks/useShoppingCart';
 import currencyFormatter from '@/tools/functions/currencyFormatter';
 import BusyIndicator from '@/pages/common/components/BusyIndicator';
 import { toast } from '@/behaviors/toastification/contexts';
 import CartQuantityContext from '@/tools/contexts/CartQuantityContext';
 import type ICartTotals from '@/tools/interfaces/ICartTotals';
+import Navbar from 'react-bootstrap/Navbar';
+import Nav from 'react-bootstrap/Nav';
+import NavDropdown from 'react-bootstrap/NavDropdown';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Badge from 'react-bootstrap/Badge';
+import Button from 'react-bootstrap/Button';
+import Image from 'react-bootstrap/Image';
+import Offcanvas from 'react-bootstrap/Offcanvas';
 
 /**
  * Footer component used for the Common Layout component.
@@ -40,6 +43,7 @@ const CommonLayoutHeader = ({cartQuantity}: ICommonLayoutHeaderProps) => {
     const navigateTo = (url: string) => {
         navigate(url);
         setNavBarIsExpanded(false);
+        setShowShoppingCart(false);
     }
 
     //===========================================================================================================================
@@ -178,7 +182,7 @@ const CommonLayoutHeader = ({cartQuantity}: ICommonLayoutHeaderProps) => {
                                 <hr className="my-1" />
                                 <Container key={lineItem.id} className="position-relative pt-2 pb-3" fluid>
                                     <Row>
-                                        <Col className="fw-bold fs-5">
+                                        <Col className="fw-bold fs-5" role="button" onClick={() => (navigateTo(`/product/${lineItem.product.sku}`))}>
                                             {lineItem.product.productName}
                                         </Col>
                                     </Row>
@@ -188,7 +192,7 @@ const CommonLayoutHeader = ({cartQuantity}: ICommonLayoutHeaderProps) => {
                                         </Col>
                                     </Row>
                                     <Row className="mt-3">
-                                        <Col>
+                                        <Col role="button" onClick={() => navigateTo(`/product/${lineItem.product.sku}`)}>
                                             <Image src={computeSwatchUrl(lineItem.product.sku, lineItem.tag.name)} fluid />
                                         </Col>
                                         <Col xs="auto" className="text-end">
@@ -249,7 +253,7 @@ const CommonLayoutHeader = ({cartQuantity}: ICommonLayoutHeaderProps) => {
                         </tbody>
                     </table>
                     <hr />
-                    <Button className="w-100" onClick={() => { setShowShoppingCart(false); navigate('/checkout'); }}>CHECKOUT</Button>
+                    <Button className="w-100" onClick={() => { navigateTo('/checkout'); }}>CHECKOUT</Button>
                 </Offcanvas.Body>
             </Offcanvas>
         </>
