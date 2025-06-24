@@ -1,8 +1,15 @@
 import type IAddToCart from "@/tools/interfaces/IAddToCart";
-import { Button, Card, Col, Container, Form, FormControl, FormText, Row } from "react-bootstrap";
 import styles from '../styles/addToCart.module.scss';
 import { useEffect, useState } from "react";
 import currencyFormatter from "@/tools/functions/currencyFormatter";
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+import FormControl from 'react-bootstrap/FormControl';
+import FormText from 'react-bootstrap/FormText';
 
 /** Quantity and Add to cart component for the product page. */
 const AddToCart = ({product, selectedColor, onAddToCart}: IAddToCart) => {

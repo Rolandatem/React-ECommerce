@@ -2,7 +2,7 @@ import SiteSettingsContext from "@/tools/contexts/SiteSettingsContext";
 import Error404 from "@/tools/exceptions/Error404";
 import asFriendlyError from "@/tools/functions/asFriendlyError";
 import queryString from "@/tools/functions/queryString";
-import type IShoppingCartLineItemOut from "@/tools/interfaces/dtos/out/IShippingCartLineItemOut";
+import type IShoppingCartLineItemOut from "@/tools/interfaces/dtos/outbound/IShippingCartLineItemOut";
 import type IFriendlyError from "@/tools/interfaces/IFriendlyError";
 import type ITestOptions from "@/tools/interfaces/ITestOptions"
 import { useCallback, useContext, useState } from "react";
@@ -110,13 +110,44 @@ const useShoppingCart = (
     }, [query, siteSettings?.webAPIUrl])
 
     //===========================================================================================================================
+    const removeLineItem = useCallback(async(
+        /** Line item to remove. */
+        lineItemId: number): Promise<IFriendlyError> => {
+
+        try {
+            const endpoint = `${siteSettings?.webAPIUrl}/shoppingcart/lineitem?${query.toString()}`;
+            const response = await fetch(endpoint, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify(lineItemId)
+            });
+
+            if (response.ok === false) { throw new Error('Failed to delete the line item in the cart.'); }
+
+            setCart(prev => (prev
+                ? {
+                    ...prev, 
+                    lineItems: prev?.lineItems.filter(li => li.id !== lineItemId)
+                } : prev));
+
+            return {hasError: false};
+        } catch (error) {
+            return asFriendlyError(error, `Sorry, we're having trouble removing the line item.`)
+        }
+    }, [query, siteSettings?.webAPIUrl])
+
+    //===========================================================================================================================
     return {
         cart,
         loadingCart,
         cartError,
         getShoppingCart,
         addItemToCart,
-        updateLineItem
+        updateLineItem,
+        removeLineItem
     }
 }
 

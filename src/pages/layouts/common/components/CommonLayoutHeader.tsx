@@ -7,8 +7,14 @@ import Container from 'react-bootstrap/Container';
 import Badge from 'react-bootstrap/Badge';
 import Col from 'react-bootstrap/Col';
 import useCategories from '@/hooks/useCategories';
-import { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import type ICommonLayoutHeaderProps from '@/tools/interfaces/ICommonLayoutHeaderProps';
+import { Button, Image, Offcanvas, Row } from 'react-bootstrap';
+import useShoppingCart from '@/hooks/useShoppingCart';
+import currencyFormatter from '@/tools/functions/currencyFormatter';
+import BusyIndicator from '@/pages/common/components/BusyIndicator';
+import { toast } from '@/behaviors/toastification/contexts';
+import CartQuantityContext from '@/tools/contexts/CartQuantityContext';
 
 /**
  * Footer component used for the Common Layout component.
@@ -18,6 +24,10 @@ const CommonLayoutHeader = ({cartQuantity}: ICommonLayoutHeaderProps) => {
     const navigate = useNavigate();
     const { categories, loadCategories } = useCategories();
     const [navBarIsExpanded, setNavBarIsExpanded] = useState<boolean>(false);
+    const [showShoppingCart, setShowShoppingCart] = useState<boolean>(false);
+    const {cart, getShoppingCart, removeLineItem} = useShoppingCart();
+    const [isBusy, setIsBusy] = useState<{[lineItemId: number]: boolean}>({});
+    const cartQuantityContext = useContext(CartQuantityContext);
 
     //===========================================================================================================================
     /**
@@ -37,6 +47,39 @@ const CommonLayoutHeader = ({cartQuantity}: ICommonLayoutHeaderProps) => {
     }
 
     //===========================================================================================================================
+    /**
+     * Used to compute the correct swatch url, includes cleaning the name from invalid characters.
+     * @param sku Product SKU
+     * @param tagName Name of the Color tag.
+     * @returns Cleaned and computed swatch url.
+     */
+    const computeSwatchUrl = (
+        sku: string,
+        tagName: string) => {
+
+        const characterCleaner = /[^a-zA-Z0-9\- ]/g; //--Only alphanumeric, dash, and space allowed.
+        return `/imagetypes/swatch/${sku}-${tagName.replace(characterCleaner, '')}.webp`;
+    }
+
+    //===========================================================================================================================
+    const onRemoveLineItem = async(lineItemId: number) => {
+        setIsBusy(prev => ({...prev, [lineItemId]: true}));
+        try {
+            const response = await removeLineItem(lineItemId);
+
+            if (response.hasError) { toast.error(response.friendlyErrorMessage); }
+            else { toast.success('Line item removed from cart.'); }
+        } finally
+        {
+            setIsBusy(prev => ({...prev, [lineItemId]: false}));
+        }
+    }
+
+    //===========================================================================================================================
+    useEffect(() => {
+        getShoppingCart();
+    }, [getShoppingCart])
+
     useEffect(() => {
         const loader = async() => {
             await loadCategories();
@@ -44,6 +87,18 @@ const CommonLayoutHeader = ({cartQuantity}: ICommonLayoutHeaderProps) => {
 
         loader();
     }, [loadCategories])
+
+    useEffect(() => {
+        if (showShoppingCart) {
+            getShoppingCart();
+        }
+    }, [getShoppingCart, showShoppingCart])
+
+    useEffect(() => {
+        let quantity = 0;
+        cart?.lineItems.forEach(lineItem => quantity += lineItem.quantity);
+        cartQuantityContext?.cartQuantitySetter(quantity);
+    }, [cart, cartQuantityContext])
 
     //===========================================================================================================================
     return (
@@ -87,7 +142,7 @@ const CommonLayoutHeader = ({cartQuantity}: ICommonLayoutHeaderProps) => {
 
                     {/* SHOPPING CART */}
                     <Col xs={2} md={3} className={styles.rightSideHeader}>
-                        <div role='button' className='d-inline'>
+                        <div role='button' className='d-inline' onClick={() => setShowShoppingCart(true)}>
                             <span className={`pi pi-shopping-cart ${styles.cart}`}></span>
                             <Badge pill>{cartQuantity}</Badge>
                         </div>
@@ -95,6 +150,90 @@ const CommonLayoutHeader = ({cartQuantity}: ICommonLayoutHeaderProps) => {
 
                 </Container>
             </Navbar>
+
+            <Offcanvas show={showShoppingCart} onHide={() => setShowShoppingCart(false)} placement='end'>
+                <Offcanvas.Header closeButton>
+                    <span className='fs-3'>Shopping Cart</span>
+                </Offcanvas.Header>
+                <Offcanvas.Body className="font-roboto">
+
+                    {/* CART LINE ITEMS */}
+                    {
+                        cart && cart.lineItems.map(lineItem => (
+                            <React.Fragment key={lineItem.id}>
+                                <hr className="my-1" />
+                                <Container key={lineItem.id} className="position-relative pt-2 pb-3" fluid>
+                                    <Row>
+                                        <Col className="fw-bold fs-5">
+                                            {lineItem.product.productName}
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col className="text-end text-muted">
+                                            {lineItem.tag.name} x{lineItem.quantity}
+                                        </Col>
+                                    </Row>
+                                    <Row className="mt-3">
+                                        <Col>
+                                            <Image src={computeSwatchUrl(lineItem.product.sku, lineItem.tag.name)} fluid />
+                                        </Col>
+                                        <Col xs="auto" className="text-end">
+                                            <Container className="text-nowrap pe-0">
+                                                <Row>
+                                                    <Col className="fs-7">
+                                                        <div>Original Price</div>
+                                                        <div className="text-decoration-line-through">{currencyFormatter.format(lineItem.originalPriceAtSale)}</div>   
+                                                        <div>Total Price</div>
+                                                        <div className="text-decoration-line-through">{currencyFormatter.format(lineItem.totalOriginalPrice)}</div>                                                 
+                                                    </Col>
+                                                    <Col className="fs-7">
+                                                        <div>Sale Price</div>
+                                                        <div className="fw-bold">{currencyFormatter.format(lineItem.salePriceAtSale)}</div>  
+                                                        <div>Your Price</div>
+                                                        <div className="fw-bold text-cyan">{currencyFormatter.format(lineItem.totalSalePrice)}</div>                                                  
+                                                    </Col>
+                                                </Row>
+                                                <Row className="mt-2">
+                                                    <Button className="py-0" onClick={() => onRemoveLineItem(lineItem.id)}>Remove</Button>
+                                                    {
+                                                        isBusy[lineItem.id] && <BusyIndicator />
+                                                    }
+                                                </Row>
+                                            </Container>
+                                        </Col>
+                                    </Row>
+                                </Container>
+                            </React.Fragment>
+                        ))
+                    }
+
+                    {/* TOTALS AND CHECKOUT BUTTON */}
+                    <hr />
+                    <div className="fw-bold fs-5">Cart Totals</div>
+                    <table className="text-end ms-auto" style={{tableLayout: 'fixed'}}>
+                        <tbody>
+                            <tr>
+                                <td>Subtotal:</td>
+                                <td className="ps-4">$99.99</td>
+                            </tr>
+                            <tr>
+                                <td>Savings:</td>
+                                <td>-$5.00</td>
+                            </tr>
+                            <tr className="border-bottom">
+                                <td>Tax:</td>
+                                <td>$8.40</td>
+                            </tr>
+                            <tr className="fw-bold">
+                                <td className="pt-2">Total:</td>
+                                <td className="pt-2 text-cyan">$103.39</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <hr />
+                    <Button className="w-100" onClick={() => { setShowShoppingCart(false); navigate('/checkout'); }}>CHECKOUT</Button>
+                </Offcanvas.Body>
+            </Offcanvas>
         </>
     )
 }

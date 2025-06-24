@@ -11,6 +11,7 @@ import Image from 'react-bootstrap/Image';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 
+/** Product page component that allows the user to select a color from the product. */
 const ColorSelect = ({product, setSelectedColor}: IColorSelect) => {
     const [swatchImages, setSwatchImages] = useState<ISwatchImage[]>([]);
     const [selectedSwatch, setSelectedSwatch] = useState<ISwatchImage>();
@@ -49,6 +50,7 @@ const ColorSelect = ({product, setSelectedColor}: IColorSelect) => {
     };
 
     //===========================================================================================================================
+    /** Builds a list of swatch urls from the product when the component loads. */
     useEffect(() => {
         buildSwatchUrls(product);
     }, [buildSwatchUrls, product])
