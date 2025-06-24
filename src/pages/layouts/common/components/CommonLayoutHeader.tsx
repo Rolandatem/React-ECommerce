@@ -15,6 +15,7 @@ import currencyFormatter from '@/tools/functions/currencyFormatter';
 import BusyIndicator from '@/pages/common/components/BusyIndicator';
 import { toast } from '@/behaviors/toastification/contexts';
 import CartQuantityContext from '@/tools/contexts/CartQuantityContext';
+import type ICartTotals from '@/tools/interfaces/ICartTotals';
 
 /**
  * Footer component used for the Common Layout component.
@@ -24,7 +25,8 @@ const CommonLayoutHeader = ({cartQuantity}: ICommonLayoutHeaderProps) => {
     const navigate = useNavigate();
     const { categories, loadCategories } = useCategories();
     const [navBarIsExpanded, setNavBarIsExpanded] = useState<boolean>(false);
-    const [showShoppingCart, setShowShoppingCart] = useState<boolean>(false);
+    const [showShoppingCart, setShowShoppingCart] = useState<boolean>(true);
+    const [cartTotal, setCartTotal] = useState<ICartTotals>({cost: 0, savings: 0, subTotal: 0, taxes: 0, cartTotal: 0});
     const {cart, getShoppingCart, removeLineItem} = useShoppingCart();
     const [isBusy, setIsBusy] = useState<{[lineItemId: number]: boolean}>({});
     const cartQuantityContext = useContext(CartQuantityContext);
@@ -95,9 +97,21 @@ const CommonLayoutHeader = ({cartQuantity}: ICommonLayoutHeaderProps) => {
     }, [getShoppingCart, showShoppingCart])
 
     useEffect(() => {
-        let quantity = 0;
-        cart?.lineItems.forEach(lineItem => quantity += lineItem.quantity);
+        const quantity: number = cart?.lineItems.reduce((qty, lineItem) => qty + lineItem.quantity, 0) ?? 0;
+        const originalCost = cart?.lineItems.reduce((price, lineItem) => price + lineItem.totalOriginalPrice, 0) ?? 0;
+        const saleCost = cart?.lineItems.reduce((price, lineItem) => price + lineItem.totalSalePrice, 0) ?? 0;
+        const savings = (originalCost - saleCost) * -1;
+        const taxes = saleCost * .07;
+        const cartTotal = saleCost + taxes;
+
         cartQuantityContext?.cartQuantitySetter(quantity);
+        setCartTotal({
+            cost: originalCost,
+            savings: savings,
+            subTotal: saleCost,
+            taxes: taxes,
+            cartTotal: cartTotal
+        })
     }, [cart, cartQuantityContext])
 
     //===========================================================================================================================
@@ -213,20 +227,24 @@ const CommonLayoutHeader = ({cartQuantity}: ICommonLayoutHeaderProps) => {
                     <table className="text-end ms-auto" style={{tableLayout: 'fixed'}}>
                         <tbody>
                             <tr>
-                                <td>Subtotal:</td>
-                                <td className="ps-4">$99.99</td>
+                                <td>Cost:</td>
+                                <td className="ps-4">{currencyFormatter.format(cartTotal.cost)}</td>
                             </tr>
                             <tr>
                                 <td>Savings:</td>
-                                <td>-$5.00</td>
+                                <td>{currencyFormatter.format(cartTotal.savings)}</td>
+                            </tr>
+                            <tr>
+                                <td>Subtotal:</td>
+                                <td>{currencyFormatter.format(cartTotal.subTotal)}</td>
                             </tr>
                             <tr className="border-bottom">
-                                <td>Tax:</td>
-                                <td>$8.40</td>
+                                <td>Tax (7%):</td>
+                                <td>{currencyFormatter.format(cartTotal.taxes)}</td>
                             </tr>
                             <tr className="fw-bold">
                                 <td className="pt-2">Total:</td>
-                                <td className="pt-2 text-cyan">$103.39</td>
+                                <td className="pt-2 text-cyan">{currencyFormatter.format(cartTotal.cartTotal)}</td>
                             </tr>
                         </tbody>
                     </table>
