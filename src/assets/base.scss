@@ -1,7 +1,7 @@
 
-@import '@modules/bootstrap/scss/functions';
-@import '@modules/bootstrap/scss/variables';
-@import '@modules/bootstrap/scss/mixins';
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins';
 
 $font-sizes: map-merge($font-sizes, (
     7: $font-size-base * 0.875,
@@ -11,8 +11,8 @@ $font-sizes: map-merge($font-sizes, (
 
 $enable-negative-margins: true;
 
-@import '@modules/bootstrap/scss/maps';
-@import '@modules/bootstrap/scss/utilities';
+@import 'bootstrap/scss/maps';
+@import 'bootstrap/scss/utilities';
 
 $utilities: map-merge(
     $utilities, (
@@ -62,4 +62,4 @@ $utilities: map-merge(
     )
 );
 
-@import '@modules/bootstrap/scss/bootstrap';
+@import 'bootstrap/scss/bootstrap';

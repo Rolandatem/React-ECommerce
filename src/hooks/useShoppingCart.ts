@@ -8,6 +8,10 @@ import type ITestOptions from "@/tools/interfaces/ITestOptions"
 import { useCallback, useContext, useState } from "react";
 import useCookies from "./useCookies";
 import type IShoppingCart from "@/tools/interfaces/dtos/IShoppingCart";
+import type IOrderDetail from "@/tools/interfaces/dtos/IOrderDetail";
+import type ICheckoutAddress from "@/tools/interfaces/ICheckoutAddress";
+import type ICheckoutPayment from "@/tools/interfaces/ICheckoutPayment";
+import type IOrderDetailOut from "@/tools/interfaces/dtos/outbound/IOrderDetailOut";
 
 /** Hook for the Shopping Cart API Endpoint. */
 const useShoppingCart = (
@@ -20,7 +24,10 @@ const useShoppingCart = (
     const [cart, setCart] = useState<IShoppingCart | undefined>(undefined);
     const [loadingCart, setLoadingCart] = useState<boolean>(false);
     const [cartError, setCartError] = useState<IFriendlyError>({hasError: false});
-    const { getCartKey, setCartKey } = useCookies();
+    const { getCartKey, setCartKey, getOrderKey, setOrderKey } = useCookies();
+    const [orderDetail, setOrderDetail] = useState<IOrderDetail>();
+    const [loadingOrderDetail, setLoadingOrderDetail] = useState<boolean>(false);
+    const [orderDetailError, setOrderDetailError] = useState<IFriendlyError>({hasError: false});
 
     //===========================================================================================================================
     /** Gets a shopping cart from the API that matches the GUID key specified. */
@@ -48,6 +55,35 @@ const useShoppingCart = (
             setLoadingCart(false);
         }
     }, [getCartKey, query, siteSettings?.webAPIUrl])
+
+    //===========================================================================================================================
+    /** Gets an order detail from the API. */
+    const getOrderDetail = useCallback(async() => {
+        setLoadingOrderDetail(true);
+        setOrderDetailError({hasError: false});
+        try {
+            const orderKey = getOrderKey();
+            if (orderKey === undefined) { return false; }
+
+            const endpoint = `${siteSettings?.webAPIUrl}/shoppingcart/order?${query.toString()}`;
+            const response = await fetch(endpoint, { credentials: 'include' });
+
+            if (response.ok === false) { throw new Error('Failed to load order detail.'); }
+
+            const data = response.headers.get('content-type')?.includes('application/json')
+                ? await response.json()
+                : undefined;
+
+            if (data === undefined) { return false; }
+            setOrderDetail(data);
+            return true;
+        } catch (error) {
+            setOrderDetailError(asFriendlyError(error, `Failed to load order details.`));
+            return false;
+        } finally {
+            setLoadingOrderDetail(false);
+        }
+    }, [getOrderKey, query, siteSettings?.webAPIUrl])
 
     //===========================================================================================================================
     /** Attempts to add a line item to a cart. If the cart does not exist on the server, it will create a new one. */
@@ -83,9 +119,13 @@ const useShoppingCart = (
     //===========================================================================================================================
     const updateLineItem = useCallback(async(
         /** Line item update contents, in this demo really only quantity. */
-        lineItem: IShoppingCartLineItemOut): Promise<IFriendlyError> => {
+        lineItem: IShoppingCartLineItemOut,
+        hideLoading: boolean = false): Promise<IFriendlyError> => {
         
-        setLoadingCart(true);
+        if (hideLoading === false) {
+            setLoadingCart(true);
+        }
+
         try {
             const endpoint = `${siteSettings?.webAPIUrl}/shoppingcart/lineitem?${query.toString()}`;
             const response = await fetch(endpoint, {
@@ -140,14 +180,83 @@ const useShoppingCart = (
     }, [query, siteSettings?.webAPIUrl])
 
     //===========================================================================================================================
+    /** Attempts to complete the order. */
+    const completeOrder = useCallback(async(
+        /** User Shipping information. */
+        shippingInformation: ICheckoutAddress, 
+        /** User Billing information. */
+        billingInformation: ICheckoutAddress, 
+        /** User Payment information. */
+        paymentInformation: ICheckoutPayment) => {
+
+        setLoadingOrderDetail(true);
+        setOrderDetailError({hasError: false});
+        try {
+            const orderDetail: IOrderDetailOut = {
+                shippingEmail: shippingInformation.email,
+                shippingFirstName: shippingInformation.firstName,
+                shippingLastName: shippingInformation.lastName,
+                shippingAddress: shippingInformation.address,
+                shippingSuiteApt: shippingInformation.suiteApt,
+                shippingCity: shippingInformation.city,
+                shippingState: shippingInformation.state,
+                shippingZipCode: shippingInformation.zipCode,
+                shippingPhone: shippingInformation.phoneNumber,
+
+                billingEmail: billingInformation.email,
+                billingFirstName: billingInformation.firstName,
+                billingLastName: billingInformation.lastName,
+                billingAddress: billingInformation.address,
+                billingSuiteApt: billingInformation.suiteApt,
+                billingCity: billingInformation.city,
+                billingState: billingInformation.state,
+                billingZipCode: billingInformation.zipCode,
+                billingPhone: billingInformation.phoneNumber,
+
+                cardNumber: paymentInformation.cardNumber,
+                nameOnCard: paymentInformation.nameOnCard,
+                expirationDate: paymentInformation.expirationDate,
+                cvv: paymentInformation.cvv
+            };
+
+            const endpoint = `${siteSettings?.webAPIUrl}/shoppingcart/order?${query.toString()}`;
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify(orderDetail)
+            });
+
+            if (response.ok === false) { throw new Error('Failed to complete checkout.'); }
+
+            const data: IOrderDetail = await response.json();
+            setOrderKey(data.orderKey);
+
+            setOrderDetail(data);
+        } catch(error) {
+            setOrderDetailError(asFriendlyError(error, `Sorry, we're having trouble completing the order.`));
+        } finally {
+            setLoadingOrderDetail(false);
+        }
+
+    }, [query, setOrderKey, siteSettings?.webAPIUrl])
+
+    //===========================================================================================================================
     return {
         cart,
         loadingCart,
         cartError,
+        orderDetail,
+        loadingOrderDetail,
+        orderDetailError,
         getShoppingCart,
+        getOrderDetail,
         addItemToCart,
         updateLineItem,
-        removeLineItem
+        removeLineItem,
+        completeOrder
     }
 }
 

@@ -1,7 +1,6 @@
 import SectionLabel from "../common/components/SectionLabel";
 import ContactReason from "@/tools/enums/ContactReason";
 import RequiredFieldLabel from "../common/components/RequiredFieldLabel";
-import { IMaskInput } from "react-imask";
 import styles from './styles/ContactUs.module.scss';
 import { useState } from "react";
 import Button from 'react-bootstrap/Button';
@@ -16,6 +15,7 @@ import type IContactForm from "@/tools/interfaces/IContactForm";
 import onCommonHandleChange from "@/tools/functions/onHandleChange";
 import capitalize from "@/tools/functions/capatilize";
 import getEnumTypes from "@/tools/functions/getEnumTypes";
+import MaskedControl from "@/behaviors/maskedControl/MaskedControl";
 
 /** Allowable contact methods, used to generate radio buttons on contact form. */
 const contactMethods = [
@@ -222,7 +222,7 @@ const ContactUs = () => {
                                     </FloatingLabel>
 
                                     <FloatingLabel className="mt-3" label="Phone">
-                                        <IMaskInput mask="(000) 000-0000" className="form-control" placeholder="" name="phone" value={contactForm.phone} onAccept={(value: string) => setContactForm(prev => ({...prev, phone: value}))} />
+                                        <MaskedControl mask="phone" required name="phone" value={contactForm.phone} onChange={onHandleChange} />
                                     </FloatingLabel>
                                     <Form.Text muted>(XXX) XXX-XXXX</Form.Text>
 

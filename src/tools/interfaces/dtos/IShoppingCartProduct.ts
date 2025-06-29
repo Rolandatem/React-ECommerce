@@ -5,5 +5,7 @@ export default interface IShoppingCartProduct {
     /** Product Name */
     productName: string,
     /** Product SKU */
-    sku: string
+    sku: string,
+    /** Ship Type */
+    shipType: string
 }

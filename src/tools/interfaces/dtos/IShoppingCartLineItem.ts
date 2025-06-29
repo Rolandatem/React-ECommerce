@@ -15,6 +15,8 @@ export default interface IShoppingCartLineItem {
     totalSalePrice: number,
     /** Total Original Price when added to cart/at sale */
     totalOriginalPrice: number,
+    /** Sales Percentage when added to cart/at sale */
+    savingsPercentageAtSale: number,
     /** Product Info */
     product: IShoppingCartProduct,
     /** Color Tag for item. */

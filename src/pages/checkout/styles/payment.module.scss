@@ -1,0 +1,7 @@
+@import '@/assets/globals.scss';
+
+@include media-breakpoint-up(lg) {
+    .paymentCard {
+        width: auto !important;
+    }
+}

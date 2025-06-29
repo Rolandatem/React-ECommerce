@@ -1,0 +1,32 @@
+@import '@/assets/globals.scss';
+
+.lineItemContainer {
+    @extend .font-roboto;
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+
+    > div {
+        padding-top: 15px;
+    }
+}
+
+.productName {
+    @extend .fw-bold;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.headerItem {
+    @extend .fs-5;
+    border-bottom: solid 2px #CCCCCC;
+    font-weight: bold;
+    text-align: center;
+    padding-top: 0 !important;
+}
+
+.footerItem {
+    border-bottom: solid 1px #EEEEEE;
+    padding-bottom: 10px;
+}

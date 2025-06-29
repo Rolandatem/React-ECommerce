@@ -5,11 +5,10 @@ import { useCallback } from 'react';
 const useCookies = () => {
 
     //===========================================================================================================================
-    /**
-     * Sets the Cart Guid Key to a user cookie.
-     * @param cartKey The cart key identifier from the API.
-     */
-    const setCartKey = useCallback(async(cartKey: string) => {
+    /** Sets the Cart Guid Key to a user cookie. */
+    const setCartKey = useCallback(async(
+        /** The cart key identifier from the API. */
+        cartKey: string) => {
         Cookies.set('cart_key', cartKey, { expires: 7 });
     }, []);
 
@@ -25,10 +24,34 @@ const useCookies = () => {
         Cookies.remove('cart_key');
     }, []);
 
+    //===========================================================================================================================
+    /** Sets the Order Detail Key to a user cookie. */
+    const setOrderKey = useCallback(async(
+        /** The order key identifier from the API. */
+        orderKey: string) => {
+        Cookies.set('order_key', orderKey, { expires: 7 });
+    }, [])
+
+    //===========================================================================================================================
+    /** Gets the Order Guid Key from the cookie. */
+    const getOrderKey = useCallback(async() => {
+        return Cookies.get('order_key');
+    }, [])
+
+    //===========================================================================================================================
+    /** Deletes the Order Guid Key cookie. */
+    const removeOrderKey = useCallback(async() => {
+        Cookies.remove('order_key');
+    }, [])
+
+    //===========================================================================================================================
     return {
         setCartKey,
         getCartKey,
-        removeCartKey
+        removeCartKey,
+        setOrderKey,
+        getOrderKey,
+        removeOrderKey
     }
 }
 

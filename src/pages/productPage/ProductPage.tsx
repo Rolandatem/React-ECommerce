@@ -64,7 +64,8 @@ const ProductPage = () => {
             salePriceAtSale: product.salePrice,
             originalPriceAtSale: product.originalPrice,
             totalSalePrice: product.salePrice * quantity,
-            totalOriginalPrice: product.originalPrice * quantity
+            totalOriginalPrice: product.originalPrice * quantity,
+            savingsPercentageAtSale: product.savingsPercentage
         });
 
         if (result.hasError) { toast.error(result.friendlyErrorMessage); }
@@ -83,7 +84,8 @@ const ProductPage = () => {
             salePriceAtSale: product.salePrice,
             originalPriceAtSale: product.originalPrice,
             totalSalePrice: product.salePrice * itemQuantityToAdd,
-            totalOriginalPrice: product.originalPrice * itemQuantityToAdd
+            totalOriginalPrice: product.originalPrice * itemQuantityToAdd,
+            savingsPercentageAtSale: product.savingsPercentage
         })
 
         if (result.hasError) { toast.error(result.friendlyErrorMessage); }
