@@ -1,5 +1,4 @@
 import SiteSettingsContext from "@/tools/contexts/SiteSettingsContext";
-import Error404 from "@/tools/exceptions/Error404";
 import asFriendlyError from "@/tools/functions/asFriendlyError";
 import queryString from "@/tools/functions/queryString";
 import type IShoppingCartLineItemOut from "@/tools/interfaces/dtos/outbound/IShippingCartLineItemOut";
@@ -44,11 +43,15 @@ const useShoppingCart = (
                 credentials: 'include'
             });
 
-            if (response.status === 404) { throw new Error404(`No cart found with cart key: ${cartKey}`); }
             if (response.ok === false) { throw new Error(`Failed to fetch a shopping cart with the cart key: ${cartKey}`); }
 
-            const data = await response.json();
-            setCart(data);
+            if (response.headers.get('content-type')?.includes('application/json')) {
+                const data = await response.json();
+                setCart(data);
+            } else {
+                setCart(undefined);
+            }
+
         } catch (error) {
             setCartError(asFriendlyError(error, `Sorry, we couldn't find a shopping cart.`));
         } finally {

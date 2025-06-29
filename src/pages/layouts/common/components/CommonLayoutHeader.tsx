@@ -95,9 +95,11 @@ const CommonLayoutHeader = ({cartQuantity}: ICommonLayoutHeaderProps) => {
     }, [loadCategories])
 
     useEffect(() => {
-        if (showShoppingCart) {
-            getShoppingCart();
-        }
+        (async() => {
+            if (showShoppingCart) {
+                await getShoppingCart();
+            }
+        })()
     }, [getShoppingCart, showShoppingCart])
 
     useEffect(() => {

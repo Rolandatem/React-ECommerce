@@ -40,7 +40,6 @@ const ThankYou = () => {
     /** Loads the current customer order on mount. */
     useEffect(() => {
         (async() => {
-            console.log('order getter');
             const success = await getOrderDetail();
             setGetOrderSuccess(success);
             setGetOrderDetailRan(true);
@@ -54,7 +53,6 @@ const ThankYou = () => {
      */
     useEffect(() => {
         if (!getOrderDetailRan) { return; }
-        console.log('key killer');
 
         if (getOrderSuccess) {
             //--Found the order.
