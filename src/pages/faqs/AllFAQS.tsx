@@ -88,7 +88,7 @@ const AllFAQs = () => {
             setAlert(prev => ({
                 ...prev,
                 show: true,
-                message: voteResult.friendlyErrorMessage
+                message: voteResult.friendlyErrorMessage!
             }));
 
             return;
@@ -141,7 +141,7 @@ const AllFAQs = () => {
             setAlert(prev => ({
                 ...prev,
                 show: true,
-                message: submitResponse.friendlyErrorMessage
+                message: submitResponse.friendlyErrorMessage!
             }));
 
             return;

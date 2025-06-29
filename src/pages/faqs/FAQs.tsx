@@ -41,7 +41,7 @@ const FAQs = () => {
             setAlert(prev => ({
                 ...prev,
                 show: true,
-                message: voteResult.friendlyErrorMessage
+                message: voteResult.friendlyErrorMessage!
             }));
 
             return;

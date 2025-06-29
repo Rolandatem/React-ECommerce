@@ -8,7 +8,7 @@ import TrendingProductCard from "../../common/components/ProductCard";
 import BusyIndicator from "@/pages/common/components/BusyIndicator";
 import ErrorIndicator from "@/pages/common/components/ErrorIndicator";
 import type IComponentClass from "@/tools/interfaces/IComponentClass";
-import type ITrendingProduct from "@/tools/interfaces/ITrendingProduct";
+import type IProduct from "@/tools/interfaces/dtos/IProduct";
 
 /**
  * Trending Product Information for Mobile devices.
@@ -18,7 +18,7 @@ const MobileTrendingProducts: React.FC<IComponentClass> = (
     
     //===========================================================================================================================
     const { trendingProducts, loadingTrendingProducts, trendingProductsError, loadTrendingProducts} = useTrendingProducts();
-    const [currentProduct, setCurrentProduct] = useState<ITrendingProduct>(emptyTrendingProduct);
+    const [currentProduct, setCurrentProduct] = useState<IProduct>(emptyTrendingProduct);
 
     //===========================================================================================================================
     const goPrevCard = () => {

@@ -1,26 +1,34 @@
 name: portfolio-react-ecommerce-container
 services:
-  mssql:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+  postgre:
+    image: estebanfmartinez/portfolio-postgre:latest
     container_name: portfolio-db
     environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=SomePassword#1
+      - POSTGRES_DB=portfoliodb
+      - POSTGRES_USER=sa
+      - POSTGRES_PASSWORD=SomePassword#1
     ports:
-      - "1433:1433"
+      - "5432:5432"
+    volumes:
+      - porfolio_db_data:/var/lib/postgresql/data
 
   webapi:
-    image: estebanfmartinez/myimages:portfolio-webapi
+    container_name: portfolio-web-api
+    image: estebanfmartinez/portfolio-webapi:latest
     environment:
       - ASPNETCORE_ENVIRONMENT=DockerCompose
     depends_on:
-      - mssql
+      - postgre
     ports:
       - "5000:5000"
 
-  ecommerce:
-    image: estebanfmartinez/myimages:portfolio-react-ecommerce
+  react-ecommerce:
+    container_name: portfolio-react-ecommerce
+    image: estebanfmartinez/portfolio-react-ecommerce:latest
     depends_on:
       - webapi
     ports:
       - "3000:3000"
+
+volumes:
+  porfolio_db_data:

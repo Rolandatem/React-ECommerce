@@ -8,39 +8,6 @@ import type ITestOptions from "@/tools/interfaces/ITestOptions";
 import { useCallback, useContext, useState } from "react"
 
 //===========================================================================================================================
-
-/**
- * An empty ITrendingProduct only used to display visually to the user
- * while the real data is being requested from the API. This makes the
- * page look cleaner instead of flickering.
- */
-const emptyTrendingProduct: IProduct = {
-    id: 0,
-    sku: '',
-    productName: '',
-    imageUrl: 'trending/empty.webp',
-    stars: 0,
-    reviews: 0,
-    colorCount: 0,
-    description: '\u00A0 '.repeat(100), //--Simulate a 2 line description.
-    salePrice: 0,
-    originalPrice: 0,
-    savingsPercentage: 0,
-    categoryId: 0,
-    productTags: [{
-        id: 0,
-        tag: {
-            id: 1,
-            name: 'None',
-            tagType: {
-                id: 1,
-                name: 'ShipType'
-            }
-        }
-    }]
-}
-
-//===========================================================================================================================
 const defaultErrorState: IFriendlyError = {hasError: false, friendlyErrorMessage: ''};
 
 //===========================================================================================================================
@@ -91,3 +58,36 @@ const useTrendingProducts = (
 }
 
 export { useTrendingProducts, emptyTrendingProduct };
+
+/**
+ * An empty ITrendingProduct only used to display visually to the user
+ * while the real data is being requested from the API. This makes the
+ * page look cleaner instead of flickering.
+ */
+const emptyTrendingProduct: IProduct = {
+    id: 0,
+    sku: '',
+    productName: '',
+    imageUrl: 'trending/empty.webp',
+    stars: 0,
+    reviews: 0,
+    colorCount: 0,
+    description: '\u00A0 '.repeat(100), //--Simulate a 2 line description.
+    salePrice: 0,
+    originalPrice: 0,
+    savingsPercentage: 0,
+    categoryId: 0,
+    productTags: [{
+        id: 0,
+        tag: {
+            id: 1,
+            name: 'None',
+            tagType: {
+                id: 1,
+                name: 'ShipType'
+            }
+        }
+    }],
+    productHighlights: [],
+    productImages: []
+}
