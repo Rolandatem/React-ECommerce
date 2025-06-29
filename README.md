@@ -32,4 +32,4 @@ This command pulls the images, spins up the contains, and gets everything runnin
 
 Once the containers are up, visit `http://localhost:3000` in your browser to check the demo.
 
-When you're done, you can clean up by running: `docker compose down -v`. This will stop and remove the contains and delete the database data volume.
+When you're done, you can clean up by running: `docker compose down -v`. This will stop and remove the containers and delete the database data volume.
