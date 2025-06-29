@@ -1,54 +1,35 @@
-# React + TypeScript + Vite
+# React e-Commerce Website
+This demo site showcases a complete e-commerce experience built with React on the frontend, connected to a custom PortfolioWebAPI (powered by .NET Core and PostgreSQL) on the backend.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Browse products, add items to your cart, and go through the entire checkout process. The site also features dedicated pages for contact, about, and FAQs for a well-rounded user experience.
 
-Currently, two official plugins are available:
+## Demo Features
+This project highlights my work with a modern React stack, including:
+- React (using functional components) for building a responsive Single Page Application (SPA).
+- TypeScript for type safety and clean code.
+- React-Bootstrap and Bootstrap 5 for polished UI components.
+- React Router for seamless client-side navigation.
+- JS Cookie for cookie management.
+- PrimeIcons for sharp iconography.
+- Integration with a RESTful WebAPI for live data.
+- Vite for fast development and builds.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Requirements
+This demo depends on my PortfolioWebAPI project and its dependencies, which you can find at [PortfolioWebAPI](https://github.com/Rolandatem/PortfolioWebAPI). Refer to that repo for details if you'd like to set up a local (non-Docker) test environment.
 
-## Expanding the ESLint configuration
+## Docker Container
+For easiest setup, I recommend using Docker containers. Demo images are available on my [Docker Hub](https://hub.docker.com/r/estebanfmartinez/portfolio-react-ecommerce/tags). All images are built for linux.
+- React e-Commerce Image [estebanfmartinez/portfolio-react-ecommerce](https://hub.docker.com/r/estebanfmartinez/portfolio-react-ecommerce)
+- Portfolio Web API [estebanfmartinez/portfolio-webapi](https://hub.docker.com/r/estebanfmartinez/portfolio-webapi)
+- Portfolio PostgreSQL Data Repository [estebanfmartinez/portfolio-postgre](https://hub.docker.com/r/estebanfmartinez/portfolio-postgre)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### How to Test
+You don't need to clone the full repo to get started. If Docker is installed, simply download the `docker-compose.yaml` file to your prefered directory.
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+Open a terminal, navigate to the folder with the `docker-compose.yaml` file, and run: `docker compose up -d`.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+This command pulls the images, spins up the contains, and gets everything running in the background.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Once the containers are up, visit `http://localhost:3000` in your browser to check the demo.
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+When you're done, you can clean up by running: `docker compose down -v`. This will stop and remove the contains and delete the database data volume.
