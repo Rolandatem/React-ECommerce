@@ -16,12 +16,24 @@ import ProductPage from "./pages/productPage/ProductPage";
 import Checkout from "./pages/checkout/Checkout";
 import ThankYou from "./pages/thankyou/ThankYou";
 
+const determineAPIUrl = () => {
+  // const envUrl = import.meta.env.VITE_PORTFOLIO_WEB_API;
+  // if (envUrl) { return envUrl; }
+
+  //--Env not supplied (ECS), use domain from site.
+  const {protocol, hostname} = window.location;
+  console.group();
+  const apiUrl = `${protocol}//${hostname}:5000/api`;
+  return apiUrl;
+}
+
 function App() {
   const siteSettings : ISiteSettings = {
     isMobile: useMediaQuery({maxWidth: 768}),
-    webAPIUrl: window.location.origin.includes('localhost')
-      ? 'http://localhost:5000/api'
-      : '<production url>'
+    // webAPIUrl: window.location.origin.includes('localhost')
+    //   ? 'http://localhost:5000/api'
+    //   : '<production url>'
+    webAPIUrl: determineAPIUrl()
   }
 
   return (

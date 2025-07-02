@@ -70,7 +70,7 @@ const ColorSelect = ({product, setSelectedColor}: IColorSelect) => {
                                                                             : styles.swatchImage 
                                                                         }`}>
                                     <OverlayTrigger placement="top"
-                                                    delay={{show: 150, hide: 150}}
+                                                    delay={{show: 50, hide: 150}}
                                                     overlay={(
                                                         <Popover>
                                                             <Popover.Body className="py-1">

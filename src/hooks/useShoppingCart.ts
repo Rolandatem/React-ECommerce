@@ -11,6 +11,7 @@ import type IOrderDetail from "@/tools/interfaces/dtos/IOrderDetail";
 import type ICheckoutAddress from "@/tools/interfaces/ICheckoutAddress";
 import type ICheckoutPayment from "@/tools/interfaces/ICheckoutPayment";
 import type IOrderDetailOut from "@/tools/interfaces/dtos/outbound/IOrderDetailOut";
+import Error404 from "@/tools/exceptions/Error404";
 
 /** Hook for the Shopping Cart API Endpoint. */
 const useShoppingCart = (
@@ -23,7 +24,7 @@ const useShoppingCart = (
     const [cart, setCart] = useState<IShoppingCart | undefined>(undefined);
     const [loadingCart, setLoadingCart] = useState<boolean>(false);
     const [cartError, setCartError] = useState<IFriendlyError>({hasError: false});
-    const { getCartKey, setCartKey, getOrderKey, setOrderKey } = useCookies();
+    const { getCartKey, setCartKey } = useCookies();
     const [orderDetail, setOrderDetail] = useState<IOrderDetail>();
     const [loadingOrderDetail, setLoadingOrderDetail] = useState<boolean>(false);
     const [orderDetailError, setOrderDetailError] = useState<IFriendlyError>({hasError: false});
@@ -35,13 +36,11 @@ const useShoppingCart = (
         setLoadingCart(true);
         setCartError({hasError: false});
         try {
-            const cartKey = getCartKey();
+            const cartKey = await getCartKey();
             if (cartKey === undefined) { throw new Error('There is currently no shopping cart.'); }
             
-            const endpoint = `${siteSettings?.webAPIUrl}/shoppingcart?${query.toString()}`;
-            const response = await fetch(endpoint, {
-                credentials: 'include'
-            });
+            const endpoint = `${siteSettings?.webAPIUrl}/shoppingcart/${cartKey}?${query.toString()}`;
+            const response = await fetch(endpoint);
 
             if (response.ok === false) { throw new Error(`Failed to fetch a shopping cart with the cart key: ${cartKey}`); }
 
@@ -65,11 +64,12 @@ const useShoppingCart = (
         setLoadingOrderDetail(true);
         setOrderDetailError({hasError: false});
         try {
-            const orderKey = getOrderKey();
-            if (orderKey === undefined) { return false; }
+            const cartKey = await getCartKey();
 
-            const endpoint = `${siteSettings?.webAPIUrl}/shoppingcart/order?${query.toString()}`;
-            const response = await fetch(endpoint, { credentials: 'include' });
+            if (cartKey === undefined) { throw new Error404("Custom does not have a cart."); }
+
+            const endpoint = `${siteSettings?.webAPIUrl}/shoppingcart/${cartKey}/order?${query.toString()}`;
+            const response = await fetch(endpoint);
 
             if (response.ok === false) { throw new Error('Failed to load order detail.'); }
 
@@ -86,7 +86,18 @@ const useShoppingCart = (
         } finally {
             setLoadingOrderDetail(false);
         }
-    }, [getOrderKey, query, siteSettings?.webAPIUrl])
+    }, [getCartKey, query, siteSettings?.webAPIUrl])
+
+    //===========================================================================================================================
+    /** Creates a new cart through the API. */
+    const createCart = useCallback(async() => {
+        const endpoint = `${siteSettings?.webAPIUrl}/shoppingcart?${query.toString()}`;
+        const response = await fetch(endpoint, { method: 'post' });
+
+        if (response.ok === false) { throw new Error('Failed to create a new cart.'); }
+
+        await setCartKey(await response.text());
+    }, [query, setCartKey, siteSettings?.webAPIUrl])
 
     //===========================================================================================================================
     /** Attempts to add a line item to a cart. If the cart does not exist on the server, it will create a new one. */
@@ -96,13 +107,19 @@ const useShoppingCart = (
         
         setLoadingCart(true);
         try {
-            const endpoint = `${siteSettings?.webAPIUrl}/shoppingcart?${query.toString()}`;
+            let cartKey = await getCartKey();
+
+            if (cartKey === undefined) {
+                await createCart();
+                cartKey = await getCartKey();
+            }
+
+            const endpoint = `${siteSettings?.webAPIUrl}/shoppingcart/${cartKey}/lineitem?${query.toString()}`;
             const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                credentials: 'include', //--For cookie.
                 body: JSON.stringify(lineItem)
             });
 
@@ -117,7 +134,7 @@ const useShoppingCart = (
         } finally {
             setLoadingCart(false);
         }
-    }, [query, setCartKey, siteSettings?.webAPIUrl])
+    }, [getCartKey, siteSettings?.webAPIUrl, query, setCartKey, createCart])
 
     //===========================================================================================================================
     const updateLineItem = useCallback(async(
@@ -130,13 +147,14 @@ const useShoppingCart = (
         }
 
         try {
-            const endpoint = `${siteSettings?.webAPIUrl}/shoppingcart/lineitem?${query.toString()}`;
+            const cartKey = await getCartKey();
+
+            const endpoint = `${siteSettings?.webAPIUrl}/shoppingcart/${cartKey}/lineitem?${query.toString()}`;
             const response = await fetch(endpoint, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                credentials: 'include',
                 body: JSON.stringify(lineItem)
             });
 
@@ -150,7 +168,7 @@ const useShoppingCart = (
         } finally {
             setLoadingCart(false);
         }
-    }, [query, siteSettings?.webAPIUrl])
+    }, [getCartKey, query, siteSettings?.webAPIUrl])
 
     //===========================================================================================================================
     const removeLineItem = useCallback(async(
@@ -158,13 +176,14 @@ const useShoppingCart = (
         lineItemId: number): Promise<IFriendlyError> => {
 
         try {
-            const endpoint = `${siteSettings?.webAPIUrl}/shoppingcart/lineitem?${query.toString()}`;
+            const cartKey = await getCartKey();
+
+            const endpoint = `${siteSettings?.webAPIUrl}/shoppingcart/${cartKey}/lineitem?${query.toString()}`;
             const response = await fetch(endpoint, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                credentials: 'include',
                 body: JSON.stringify(lineItemId)
             });
 
@@ -180,7 +199,7 @@ const useShoppingCart = (
         } catch (error) {
             return asFriendlyError(error, `Sorry, we're having trouble removing the line item.`)
         }
-    }, [query, siteSettings?.webAPIUrl])
+    }, [getCartKey, query, siteSettings?.webAPIUrl])
 
     //===========================================================================================================================
     /** Attempts to complete the order. */
@@ -195,6 +214,8 @@ const useShoppingCart = (
         setLoadingOrderDetail(true);
         setOrderDetailError({hasError: false});
         try {
+            const cartKey = await getCartKey();
+
             const orderDetail: IOrderDetailOut = {
                 shippingEmail: shippingInformation.email,
                 shippingFirstName: shippingInformation.firstName,
@@ -222,29 +243,27 @@ const useShoppingCart = (
                 cvv: paymentInformation.cvv
             };
 
-            const endpoint = `${siteSettings?.webAPIUrl}/shoppingcart/order?${query.toString()}`;
+            const endpoint = `${siteSettings?.webAPIUrl}/shoppingcart/${cartKey}/order?${query.toString()}`;
             const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                credentials: 'include',
                 body: JSON.stringify(orderDetail)
             });
 
             if (response.ok === false) { throw new Error('Failed to complete checkout.'); }
 
             const data: IOrderDetail = await response.json();
-            setOrderKey(data.orderKey);
-
             setOrderDetail(data);
         } catch(error) {
+            console.log('error: ', error);
             setOrderDetailError(asFriendlyError(error, `Sorry, we're having trouble completing the order.`));
         } finally {
             setLoadingOrderDetail(false);
         }
 
-    }, [query, setOrderKey, siteSettings?.webAPIUrl])
+    }, [getCartKey, query, siteSettings?.webAPIUrl])
 
     //===========================================================================================================================
     return {

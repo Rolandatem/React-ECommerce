@@ -25,33 +25,10 @@ const useCookies = () => {
     }, []);
 
     //===========================================================================================================================
-    /** Sets the Order Detail Key to a user cookie. */
-    const setOrderKey = useCallback(async(
-        /** The order key identifier from the API. */
-        orderKey: string) => {
-        Cookies.set('order_key', orderKey, { expires: 7 });
-    }, [])
-
-    //===========================================================================================================================
-    /** Gets the Order Guid Key from the cookie. */
-    const getOrderKey = useCallback(async() => {
-        return Cookies.get('order_key');
-    }, [])
-
-    //===========================================================================================================================
-    /** Deletes the Order Guid Key cookie. */
-    const removeOrderKey = useCallback(async() => {
-        Cookies.remove('order_key');
-    }, [])
-
-    //===========================================================================================================================
     return {
         setCartKey,
         getCartKey,
-        removeCartKey,
-        setOrderKey,
-        getOrderKey,
-        removeOrderKey
+        removeCartKey
     }
 }
 

@@ -1,4 +1,5 @@
 import type IBusyIndicator from "@/tools/interfaces/IBusyIndicator";
+import { useEffect, useState } from "react";
 import { Spinner } from "react-bootstrap";
 
 /**
@@ -11,6 +12,9 @@ import { Spinner } from "react-bootstrap";
 const BusyIndicator = ({
     label = 'Loading...',
     position = 'absolute'}: IBusyIndicator) => {
+    
+    //===========================================================================================================================
+    const [visible, setVisible] = useState<boolean>(false);
 
     //===========================================================================================================================
     if (position !== 'absolute' && position !== 'fixed') {
@@ -19,6 +23,18 @@ const BusyIndicator = ({
     const busyIndicatorPosition = position == 'absolute'
         ? 'position-absolute'
         : 'position-fixed';
+
+    //===========================================================================================================================
+    useEffect(() => {
+        //--Start delay timer
+        const timer = setTimeout(() => setVisible(true), 750);
+
+        //--Cleanup if unmounted before 500ms.
+        return () => clearTimeout(timer);
+    }, [])
+
+    //===========================================================================================================================
+    if (visible === false) { return null; }
 
     //===========================================================================================================================
     return(

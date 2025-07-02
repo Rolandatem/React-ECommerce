@@ -13,13 +13,14 @@ import Alert from 'react-bootstrap/Alert';
 import Card from 'react-bootstrap/Card';
 import Image from 'react-bootstrap/Image';
 import CartQuantityContext from "@/tools/contexts/CartQuantityContext";
+import Error404 from "@/tools/exceptions/Error404";
 
 /** Thank you page component. */
 const ThankYou = () => {
     const navigate = useNavigate();
     const siteSettings = useContext(SiteSettingsContext);
     const {orderDetail, loadingOrderDetail, orderDetailError, getOrderDetail} = useShoppingCart();
-    const {removeCartKey, removeOrderKey} = useCookies();
+    const {removeCartKey} = useCookies();
     const cartQuantityContext = useContext(CartQuantityContext);
     const [getOrderDetailRan, setGetOrderDetailRan] = useState<boolean>(false);
     const [getOrderSuccess, setGetOrderSuccess] = useState<boolean | null>(null);
@@ -57,17 +58,16 @@ const ThankYou = () => {
         if (getOrderSuccess) {
             //--Found the order.
             removeCartKey();
-            removeOrderKey();
             cartQuantityContext?.cartQuantitySetter(0);
         } else {
             //--Error or not found.
-            if (orderDetailError.hasError) {
+            if (orderDetailError.hasError && orderDetailError.errorType !== Error404) {
                 toast.error(orderDetailError.friendlyErrorMessage);
             }
 
             navigate('/');
         }
-    }, [cartQuantityContext, getOrderDetailRan, getOrderSuccess, navigate, orderDetailError, removeCartKey, removeOrderKey])
+    }, [cartQuantityContext, getOrderDetailRan, getOrderSuccess, navigate, orderDetailError, removeCartKey])
 
     //===========================================================================================================================
     return(
