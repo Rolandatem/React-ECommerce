@@ -13,6 +13,8 @@ This project highlights my work with a modern React stack, including:
 - PrimeIcons for sharp iconography.
 - Integration with a RESTful WebAPI for live data.
 - Vite for fast development and builds.
+- Responsive layout for all devices.
+- Deployed as containers via Amazon ECS.
 
 ## Requirements
 This demo depends on my PortfolioWebAPI project and its dependencies, which you can find at [PortfolioWebAPI](https://github.com/Rolandatem/PortfolioWebAPI). Refer to that repo for details if you'd like to set up a local (non-Docker) test environment.
