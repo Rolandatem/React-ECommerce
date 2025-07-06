@@ -1,5 +1,6 @@
 import SiteSettingsContext from "@/tools/contexts/SiteSettingsContext";
 import asFriendlyError from "@/tools/functions/asFriendlyError";
+import inFetch from "@/tools/functions/inFetch";
 import queryString from "@/tools/functions/queryString";
 import type ISiteFilterTagType from "@/tools/interfaces/dtos/ISiteFilterTagType";
 import type IFriendlyError from "@/tools/interfaces/IFriendlyError";
@@ -26,7 +27,7 @@ const useTags = (
 
         try {
             const endpoint = `${siteSettings?.webAPIUrl}/tag/sitefiltertagtypes?${query.toString()}`;
-            const response = await fetch(endpoint);
+            const response = await inFetch(endpoint);
 
             if (response.ok === false) { throw new Error('Failed to fetch SiteFilterTagTypes.'); }
 

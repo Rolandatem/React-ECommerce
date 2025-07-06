@@ -137,3 +137,4 @@ dist
 
 # docker compose override (for local use)
 docker-compose.override.yaml
+docker-compose.prod.yaml

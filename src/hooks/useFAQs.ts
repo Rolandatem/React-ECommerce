@@ -1,5 +1,6 @@
 import SiteSettingsContext from "@/tools/contexts/SiteSettingsContext";
 import asFriendlyError from "@/tools/functions/asFriendlyError";
+import inFetch from "@/tools/functions/inFetch";
 import queryString from "@/tools/functions/queryString";
 import type IFAQ from "@/tools/interfaces/IFAQ";
 import type IFriendlyError from "@/tools/interfaces/IFriendlyError";
@@ -34,7 +35,7 @@ const useFAQs = (
 
         try {
             const endpoint = `${siteSettings?.webAPIUrl}/faqs${topten ? '/top-ten' : ''}?${query.toString()}`;
-            const response = await fetch(endpoint);
+            const response = await inFetch(endpoint);
 
             if (response.ok === false) { throw new Error('Failed to fetch FAQs.'); }
 
@@ -58,7 +59,7 @@ const useFAQs = (
 
         try {
             const endpoint = `${siteSettings?.webAPIUrl}/faqs/${id}?${query.toString()}`;
-            const response = await fetch(endpoint);
+            const response = await inFetch(endpoint);
 
             if (response.ok === false) { throw new Error("Failed to fetch FAQ"); }
 
@@ -82,7 +83,7 @@ const useFAQs = (
 
         try {
             const endpoint = `${siteSettings?.webAPIUrl}/faqs/${id}/vote/${voteType}?${query.toString()}`;
-            const response = await fetch(endpoint, {method: 'PATCH'});
+            const response = await inFetch(endpoint, {method: 'PATCH'});
 
             if (response.ok === false) { throw new Error('Unable to record vote.'); }
 
@@ -103,7 +104,7 @@ const useFAQs = (
         try {
             query.append('query', searchQuery);
             const endpoint = `${siteSettings?.webAPIUrl}/faqs/search?${query.toString()}`;
-            const response = await fetch(endpoint);
+            const response = await inFetch(endpoint);
             
             if (response.ok === false) { throw new Error('Unable to search FAQs'); }
 
@@ -124,7 +125,7 @@ const useFAQs = (
 
         try {
             const endpoint = `${siteSettings?.webAPIUrl}/faqs`;
-            const response = await fetch(endpoint, {
+            const response = await inFetch(endpoint, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

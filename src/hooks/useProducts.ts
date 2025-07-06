@@ -6,6 +6,7 @@ import type IProduct from "@/tools/interfaces/dtos/IProduct";
 import type ITestOptions from "@/tools/interfaces/ITestOptions";
 import { useCallback, useContext, useState } from "react";
 import Error404 from "@/tools/exceptions/Error404";
+import inFetch from "@/tools/functions/inFetch";
 
 //===========================================================================================================================
 const defaultErrorState: IFriendlyError = {hasError: false, friendlyErrorMessage: ''}
@@ -31,7 +32,7 @@ const useProducts = (
 
         try {
             const endpoint = `${siteSettings?.webAPIUrl}/product?${query.toString()}`;
-            const response = await fetch(endpoint);
+            const response = await inFetch(endpoint);
 
             if (response.ok === false) { throw new Error('Failed to fetch Products.'); }
 
@@ -52,7 +53,7 @@ const useProducts = (
         
         try {
             const endpoint = `${siteSettings?.webAPIUrl}/product/${id}?${query.toString()}`;
-            const response = await fetch(endpoint);
+            const response = await inFetch(endpoint);
 
             if (response.status === 404) { throw new Error404(`Product ID: ${id} does not exist.`); }
             if (response.ok === false) { throw new Error(`Failed to fetch Product ID: ${id}`); }
@@ -75,7 +76,7 @@ const useProducts = (
 
         try {
             const endpoint = `${siteSettings?.webAPIUrl}/product/${sku}?${query.toString()}`;
-            const response = await fetch(endpoint);
+            const response = await inFetch(endpoint);
 
             if (response.status === 404) { throw new Error404(`Product SKU: ${sku} does not exist.`); }
             if (response.ok === false) { throw new Error(`Failed to fetch Product SKU: ${sku}`); }
@@ -105,7 +106,7 @@ const useProducts = (
         setProductsError(defaultErrorState);
         try {
             const endpoint = `${siteSettings?.webAPIUrl}/product/bycategory/${id}?${query.toString()}`;
-            const response = await fetch(endpoint);
+            const response = await inFetch(endpoint);
 
             if (response.ok === false) { throw new Error(`Failed to fetch Products with Category Id: ${id}`); }
 

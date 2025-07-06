@@ -1,8 +1,27 @@
 name: portfolio-react-ecommerce-container
 services:
+  react-ecommerce:
+    image: estebanfmartinez/portfolio-react-ecommerce:latest
+    container_name: portfolio-react-ecommerce
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+    depends_on:
+      - webapi
+  webapi:
+    image: estebanfmartinez/portfolio-webapi:latest
+    container_name: portfolio-web-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=DockerCompose
+      - ASPNETCORE_URLS=http://+:5000
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgre
   postgre:
     image: estebanfmartinez/portfolio-postgre:latest
-    container_name: portfolio-db
+    container_name: portfolio-postgre-db
     environment:
       - POSTGRES_DB=portfoliodb
       - POSTGRES_USER=sa
@@ -10,25 +29,6 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - porfolio_db_data:/var/lib/postgresql/data
-
-  webapi:
-    container_name: portfolio-web-api
-    image: estebanfmartinez/portfolio-webapi:latest
-    environment:
-      - ASPNETCORE_ENVIRONMENT=DockerCompose
-    depends_on:
-      - postgre
-    ports:
-      - "5000:5000"
-
-  react-ecommerce:
-    container_name: portfolio-react-ecommerce
-    image: estebanfmartinez/portfolio-react-ecommerce:latest
-    depends_on:
-      - webapi
-    ports:
-      - "3000:3000"
-
+      - porfolio_db_data:/var/lib/postgresql/data"
 volumes:
   porfolio_db_data:

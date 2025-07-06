@@ -1,5 +1,6 @@
 import SiteSettingsContext from "@/tools/contexts/SiteSettingsContext";
 import asFriendlyError from "@/tools/functions/asFriendlyError";
+import inFetch from "@/tools/functions/inFetch";
 import queryString from "@/tools/functions/queryString";
 import type IProduct from "@/tools/interfaces/dtos/IProduct";
 import type IError from "@/tools/interfaces/IError";
@@ -35,7 +36,7 @@ const useTrendingProducts = (
 
         try {
             const endpoint = `${siteSettings?.webAPIUrl}/trendingproducts?${query.toString()}`;
-            const response = await fetch(endpoint);
+            const response = await inFetch(endpoint);
             
             if (response.ok === false) { throw new Error('Failed to fetch Trending Products.'); }
 

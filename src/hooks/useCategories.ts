@@ -1,6 +1,7 @@
 import SiteSettingsContext from "@/tools/contexts/SiteSettingsContext";
 import Error404 from "@/tools/exceptions/Error404";
 import asFriendlyError from "@/tools/functions/asFriendlyError";
+import inFetch from "@/tools/functions/inFetch";
 import queryString from "@/tools/functions/queryString";
 import type ICategory from "@/tools/interfaces/ICategory";
 import type IFriendlyError from "@/tools/interfaces/IFriendlyError";
@@ -43,7 +44,7 @@ const useCategories = (
 
         try {
             const endpoint = `${siteSettings?.webAPIUrl}/category?${query.toString()}`;
-            const response = await fetch(endpoint);
+            const response = await inFetch(endpoint);
 
             if (response.ok === false) { throw new Error('Failed to fetch Categories.'); }
 
@@ -72,7 +73,7 @@ const useCategories = (
         
         try {
             const endpoint = `${siteSettings?.webAPIUrl}/category/${categoryId}?${query.toString()}`;
-            const response = await fetch(endpoint);
+            const response = await inFetch(endpoint);
 
             if (response.status === 404) { throw new Error404(`Category for ID: ${categoryId} does not exist.`); }
             if (response.ok === false) { throw new Error(`Failed to fetch the Category for ID: ${categoryId}`); }

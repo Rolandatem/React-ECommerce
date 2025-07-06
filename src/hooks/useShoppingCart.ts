@@ -12,6 +12,7 @@ import type ICheckoutAddress from "@/tools/interfaces/ICheckoutAddress";
 import type ICheckoutPayment from "@/tools/interfaces/ICheckoutPayment";
 import type IOrderDetailOut from "@/tools/interfaces/dtos/outbound/IOrderDetailOut";
 import Error404 from "@/tools/exceptions/Error404";
+import inFetch from "@/tools/functions/inFetch";
 
 /** Hook for the Shopping Cart API Endpoint. */
 const useShoppingCart = (
@@ -40,7 +41,7 @@ const useShoppingCart = (
             if (cartKey === undefined) { throw new Error('There is currently no shopping cart.'); }
             
             const endpoint = `${siteSettings?.webAPIUrl}/shoppingcart/${cartKey}?${query.toString()}`;
-            const response = await fetch(endpoint);
+            const response = await inFetch(endpoint);
 
             if (response.ok === false) { throw new Error(`Failed to fetch a shopping cart with the cart key: ${cartKey}`); }
 
@@ -69,7 +70,7 @@ const useShoppingCart = (
             if (cartKey === undefined) { throw new Error404("Custom does not have a cart."); }
 
             const endpoint = `${siteSettings?.webAPIUrl}/shoppingcart/${cartKey}/order?${query.toString()}`;
-            const response = await fetch(endpoint);
+            const response = await inFetch(endpoint);
 
             if (response.ok === false) { throw new Error('Failed to load order detail.'); }
 
@@ -92,7 +93,7 @@ const useShoppingCart = (
     /** Creates a new cart through the API. */
     const createCart = useCallback(async() => {
         const endpoint = `${siteSettings?.webAPIUrl}/shoppingcart?${query.toString()}`;
-        const response = await fetch(endpoint, { method: 'post' });
+        const response = await inFetch(endpoint, { method: 'post' });
 
         if (response.ok === false) { throw new Error('Failed to create a new cart.'); }
 
@@ -115,7 +116,7 @@ const useShoppingCart = (
             }
 
             const endpoint = `${siteSettings?.webAPIUrl}/shoppingcart/${cartKey}/lineitem?${query.toString()}`;
-            const response = await fetch(endpoint, {
+            const response = await inFetch(endpoint, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -150,7 +151,7 @@ const useShoppingCart = (
             const cartKey = await getCartKey();
 
             const endpoint = `${siteSettings?.webAPIUrl}/shoppingcart/${cartKey}/lineitem?${query.toString()}`;
-            const response = await fetch(endpoint, {
+            const response = await inFetch(endpoint, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
@@ -178,14 +179,8 @@ const useShoppingCart = (
         try {
             const cartKey = await getCartKey();
 
-            const endpoint = `${siteSettings?.webAPIUrl}/shoppingcart/${cartKey}/lineitem?${query.toString()}`;
-            const response = await fetch(endpoint, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(lineItemId)
-            });
+            const endpoint = `${siteSettings?.webAPIUrl}/shoppingcart/${cartKey}/lineitem/${lineItemId}?${query.toString()}`;
+            const response = await inFetch(endpoint, { method: 'DELETE' });
 
             if (response.ok === false) { throw new Error('Failed to delete the line item in the cart.'); }
 
@@ -244,7 +239,7 @@ const useShoppingCart = (
             };
 
             const endpoint = `${siteSettings?.webAPIUrl}/shoppingcart/${cartKey}/order?${query.toString()}`;
-            const response = await fetch(endpoint, {
+            const response = await inFetch(endpoint, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
