@@ -1,0 +1,9 @@
+services:
+  react-ecommerce:
+    container_name: portfolio-react-ecommerce
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_WEB_API_URL: "https://ecommerce-webapi-95395764762.us-south1.run.app/api"
+    image: estebanfmartinez/portfolio-react-ecommerce:prod

@@ -1,0 +1,14 @@
+services:
+  react-ecommerce:
+    container_name: portfolio-react-ecommerce-dev
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_WEB_API_URL: "http://localhost:5000/api"
+  webapi:
+    container_name: portfolio-web-api-dev
+    image: estebanfmartinez/portfolio-webapi:latest
+  postgre:
+    image: estebanfmartinez/portfolio-postgre:latest
+    container_name: portfolio-db-dev

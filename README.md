@@ -16,15 +16,19 @@ This project highlights my work with a modern React stack, including:
 - Responsive layout for all devices.
 - Deployed as containers via Amazon ECS.
 
+In live demo:
+- Usage of Google Cloud Run
+- Usage of Google Cloud SQL
+
 ## Requirements
 This demo depends on my PortfolioWebAPI project and its dependencies, which you can find at [PortfolioWebAPI](https://github.com/Rolandatem/PortfolioWebAPI). Refer to that repo for details if you'd like to set up a local (non-Docker) test environment.
 
 ## Live Test Site
-This demo is currently hosted in an Amazon ECS service for testing. Please follow the link below to view. **NOTE:** ECS Reassigns a new public IP every time the service is updated so it may be different in the future.
+This demo is currently hosted in an Google Cloud Run service for testing. Please follow the link below to view.
 
-[Demo Live Site](http://3.80.198.218:3000)  
-(http://3.80.198.218:3000)  
-*As of 7/2/2025 11:22am MST*
+[Demo Live Site](https://react-ecommerce.estebanfmartinez.com)  
+(https://react-ecommerce.estebanfmartinez.com)  
+*As of 7/7/2025 02:05am MST*
 
 ## Docker Container
 For easiest setup, I recommend using Docker containers. Demo images are available on my [Docker Hub](https://hub.docker.com/r/estebanfmartinez/portfolio-react-ecommerce/tags). All images are built for linux.
